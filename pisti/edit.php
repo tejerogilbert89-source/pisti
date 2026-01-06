@@ -32,7 +32,7 @@ if (!$book) {
 // GET LATEST TRANSACTION FOR BOOK
 // ===============================
 $stmt2 = $conn->prepare("
-    SELECT * FROM transaction 
+    SELECT * FROM transactions 
     WHERE book_id=? 
     ORDER BY Transaction_id DESC 
     LIMIT 1
@@ -45,10 +45,6 @@ $transaction = $stmt2->get_result()->fetch_assoc();
 if (!$transaction) {
     $transaction = [
         "Transaction_id" => null,
-        "student_name" => "",
-        "student_id" => "",
-        "course" => "",
-        "year" => "",
         "quantity" => $book["volume"]
     ];
 }
@@ -63,10 +59,7 @@ if (isset($_POST['updateItem'])) {
     $status   = $_POST['itemStatus'];
     $quantity = $_POST['itemQuantity'];
 
-    $student_name = $_POST['student_name'];
-    $student_id   = $_POST['student_id'];
-    $course       = $_POST['course'];
-    $year         = $_POST['year'];
+  
 
     // -------- UPDATE BOOK TABLE --------
     $updateBook = $conn->prepare("
@@ -84,15 +77,12 @@ if (isset($_POST['updateItem'])) {
 
         $updateTrans = $conn->prepare("
             UPDATE transaction 
-            SET student_name=?, student_id=?, course=?, year=?, quantity=?, book_name=?
+            SET quantity=?, book_name=?
             WHERE Transaction_id=?
         ");
 
         $updateTrans->bind_param("sissisi", 
-            $student_name, 
-            $student_id, 
-            $course, 
-            $year, 
+           
             $quantity, 
             $name,
             $trans_id
@@ -119,8 +109,9 @@ if (isset($_POST['updateItem'])) {
     <aside class="sidebar">
         <h2>ADMIN</h2>
         <ul>
-            <li><a href="index.php">📚 Items</a></li>
-            <li><a href="Transaction.php">📜 Transaction History</a></li>
+             <li><a href="index.php">Home</a></li>
+            <li><a href="borrow.php">Borrow Books</a></li>
+            <li><a href="TransactionHistory.php">Transaction History</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </aside>
@@ -135,22 +126,7 @@ if (isset($_POST['updateItem'])) {
 
             <form method="POST" class="item-form">
 
-                <label>Student Name:</label>
-                <input type="text" name="student_name" 
-                       value="<?= htmlspecialchars($transaction['student_name']) ?>" required>
-
-                <label>Student ID:</label>
-                <input type="number" name="student_id" 
-                       value="<?= htmlspecialchars($transaction['student_id']) ?>" required>
-
-                <label>Course:</label>
-                <input type="text" name="course" 
-                       value="<?= htmlspecialchars($transaction['course']) ?>" required>
-
-                <label>Year:</label>
-                <input type="text" name="year" 
-                       value="<?= htmlspecialchars($transaction['year']) ?>" required>
-
+               
                 <label>Item Name:</label>
                 <input type="text" name="itemName" 
                        value="<?= htmlspecialchars($book['book_name']) ?>" required>

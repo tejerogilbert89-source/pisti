@@ -138,6 +138,9 @@ $books = $conn->query($sql);
             <h3>Add New Book to Inventory</h3>
             <input type="text" name="itemName" placeholder="Book Name" required>
             <input type="text" name="itemCategory" placeholder="Category" required>
+            <input type="text" name="Author" placeholder="Author" required>
+            
+            <input type="text" name="ISBN" placeholder="ISBN" required>
             <select name="itemStatus" required>
                 <option value="Available">Available</option>
                 <option value="Defective">Defective</option>

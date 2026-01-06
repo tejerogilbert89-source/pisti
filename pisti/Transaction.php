@@ -7,7 +7,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-$transactions = $conn->query("SELECT * FROM transaction ORDER BY Transaction_id DESC");
+$transactions = $conn->query("SELECT * FROM transactions ORDER BY Transaction_id DESC");
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,7 +24,7 @@ $transactions = $conn->query("SELECT * FROM transaction ORDER BY Transaction_id 
         <ul>
             
             <li><a href="index.php"> Items</a></li>
-            <li><a href="manage_php">Borrow / Return</a></li>
+            <li><a href="borrow.php">Borrow / Return</a></li>
             <li><a href="Transaction.php" class="active"> Transaction History</a></li>
             <li><a href="logout.php">➜] Logout</a></li>
         </ul>

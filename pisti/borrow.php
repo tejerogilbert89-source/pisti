@@ -55,7 +55,7 @@ $borrowed_books = $conn->query("
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="stylesheet" content="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Borrow Books</title>
 </head>
 <body>
@@ -67,7 +67,6 @@ $borrowed_books = $conn->query("
         <ul>
             <li><a href="index.php">Home</a></li>
             <li><a href="borrow.php">Borrow Books</a></li>
-            <li><a href="manage_items.php">Manage Items</a></li>
             <li><a href="TransactionHistory.php">Transaction History</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>

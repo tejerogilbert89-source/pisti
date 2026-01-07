@@ -16,9 +16,11 @@ if (!isset($_GET['book_id'])) {
 
 $book_id = intval($_GET['book_id']);
 
-// ===============================
-// GET BOOK INFO
-// ===============================
+/*
+=================================
+ GET BOOK INFO
+=================================
+*/
 $stmt = $conn->prepare("SELECT * FROM books WHERE book_id=? LIMIT 1");
 $stmt->bind_param("i", $book_id);
 $stmt->execute();
@@ -28,79 +30,58 @@ if (!$book) {
     die("Book not found.");
 }
 
-// ===============================
-// GET LATEST TRANSACTION FOR BOOK
-// ===============================
-$stmt2 = $conn->prepare("
-    SELECT * FROM transactions 
-    WHERE book_id=? 
-    ORDER BY Transaction_id DESC 
-    LIMIT 1
-");
-$stmt2->bind_param("i", $book_id);
-$stmt2->execute();
-$transaction = $stmt2->get_result()->fetch_assoc();
-
-// If no transaction exists, create blank
-if (!$transaction) {
-    $transaction = [
-        "Transaction_id" => null,
-        "quantity" => $book["volume"]
-    ];
-}
-
-// ===============================
-// UPDATE ITEM
-// ===============================
+/*
+=================================
+ UPDATE BOOK
+=================================
+*/
 if (isset($_POST['updateItem'])) {
 
-    $name     = $_POST['itemName'];
-    $category = $_POST['itemCategory'];
-    $status   = $_POST['itemStatus'];
-    $quantity = $_POST['itemQuantity'];
+    $name     = trim($_POST['itemName']);
+    $category = trim($_POST['itemCategory']);
+    $author   = trim($_POST['itemAuthor']);
+    $isbn     = trim($_POST['itemISBN']);
+    $status   = trim($_POST['itemStatus']);
+    $quantity = (int)$_POST['itemQuantity'];
 
-  
+    // Prevent negative quantity
+    if ($quantity < 0) {
+        $quantity = 0;
+    }
 
-    // -------- UPDATE BOOK TABLE --------
-    $updateBook = $conn->prepare("
+    // Auto-fix status based on quantity
+    if ($quantity == 0) {
+        $status = 'Out of Stock';
+    }
+
+    $update = $conn->prepare("
         UPDATE books 
-        SET book_name=?, category=?, status=?, volume=?
+        SET book_name=?, category=?, author=?, isbn=?, status=?, volume=?
         WHERE book_id=?
     ");
-    $updateBook->bind_param("sssii", $name, $category, $status, $quantity, $book_id);
-    $updateBook->execute();
-
-    // -------- UPDATE ONLY LATEST TRANSACTION --------
-    if ($transaction['Transaction_id']) {
-
-        $trans_id = $transaction['Transaction_id'];
-
-        $updateTrans = $conn->prepare("
-            UPDATE transaction 
-            SET quantity=?, book_name=?
-            WHERE Transaction_id=?
-        ");
-
-        $updateTrans->bind_param("sissisi", 
-           
-            $quantity, 
-            $name,
-            $trans_id
-        );
-
-        $updateTrans->execute();
-    }
+    $update->bind_param(
+        "sssssii",
+        $name,
+        $category,
+        $author,
+        $isbn,
+        $status,
+        $quantity,
+        $book_id
+    );
+    $update->execute();
 
     header("Location: index.php?updated=1");
     exit();
 }
-
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Edit Item</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Edit Book</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -109,9 +90,9 @@ if (isset($_POST['updateItem'])) {
     <aside class="sidebar">
         <h2>ADMIN</h2>
         <ul>
-             <li><a href="index.php">Home</a></li>
-            <li><a href="borrow.php">Borrow Books</a></li>
-            <li><a href="TransactionHistory.php">Transaction History</a></li>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="borrow.php">Borrow / Return</a></li>
+            <li><a href="transaction.php">Transaction History</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </aside>
@@ -119,32 +100,40 @@ if (isset($_POST['updateItem'])) {
     <main class="main">
 
         <header class="topbar">
-            <h1>Edit Item</h1>
+            <h1>Edit Book</h1>
         </header>
 
         <section class="page-inner">
 
             <form method="POST" class="item-form">
 
-               
-                <label>Item Name:</label>
-                <input type="text" name="itemName" 
+                <label>Book Name</label>
+                <input type="text" name="itemName"
                        value="<?= htmlspecialchars($book['book_name']) ?>" required>
 
-                <label>Category:</label>
+                <label>Category</label>
                 <input type="text" name="itemCategory"
                        value="<?= htmlspecialchars($book['category']) ?>" required>
 
-                <label>Status:</label>
+                <label>Author</label>
+                <input type="text" name="itemAuthor"
+                       value="<?= htmlspecialchars($book['Author']) ?>" required>
+
+                <label>ISBN</label>
+                <input type="text" name="itemISBN"
+                       value="<?= htmlspecialchars($book['ISBN']) ?>" required>
+
+                <label>Status</label>
                 <select name="itemStatus">
-                    <option <?= $book['status']=="Usable / Available" ? "selected" : "" ?>>Usable / Available</option>
-                    <option <?= $book['status']=="Borrowed" ? "selected" : "" ?>>Borrowed</option>
-                    <option <?= $book['status']=="Broken / Defective" ? "selected" : "" ?>>Broken / Defective</option>
+                    <option value="Available" <?= $book['status']=="Available" ? "selected" : "" ?>>Available</option>
+                    <option value="Borrowed" <?= $book['status']=="Borrowed" ? "selected" : "" ?>>Borrowed</option>
+                    <option value="Defective" <?= $book['status']=="Defective" ? "selected" : "" ?>>Defective</option>
+                    <option value="Out of Stock" <?= $book['status']=="Out of Stock" ? "selected" : "" ?>>Out of Stock</option>
                 </select>
 
-                <label>Quantity:</label>
-                <input type="number" name="itemQuantity" min="1"
-                       value="<?= htmlspecialchars($book['volume']) ?>" required>
+                <label>Quantity</label>
+                <input type="number" name="itemQuantity" min="0"
+                       value="<?= (int)$book['volume'] ?>" required>
 
                 <button type="submit" name="updateItem">Save Changes</button>
                 <a href="index.php">Cancel</a>

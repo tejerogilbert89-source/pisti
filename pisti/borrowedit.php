@@ -18,7 +18,7 @@ if (isset($_POST['borrow'])) {
     $course = trim($_POST['course']);
     $year = trim($_POST['year']);
 
-    // Check book
+    // Check book availability
     $stmt = $conn->prepare("SELECT book_name, volume, status FROM books WHERE book_id = ?");
     $stmt->bind_param("i", $book_id);
     $stmt->execute();
@@ -37,7 +37,7 @@ if (isset($_POST['borrow'])) {
         exit();
     }
 
-    // Check if student exists
+    // Check if student exists, if not insert
     $stmt = $conn->prepare("SELECT student_id FROM students WHERE student_id = ?");
     $stmt->bind_param("i", $student_id);
     $stmt->execute();
@@ -93,11 +93,13 @@ if (isset($_POST['return'])) {
     $trans = $result->fetch_assoc();
     $stmt->close();
 
+    // Update transaction
     $stmt = $conn->prepare("UPDATE transactions SET date_returned = NOW() WHERE transaction_id = ?");
     $stmt->bind_param("i", $transaction_id);
     $stmt->execute();
     $stmt->close();
 
+    // Update book quantity
     $new_qty = $trans['volume'] + 1;
     $new_status = 'Available';
     $stmt = $conn->prepare("UPDATE books SET volume=?, status=? WHERE book_id=?");
@@ -106,34 +108,6 @@ if (isset($_POST['return'])) {
     $stmt->close();
 
     $_SESSION['message'] = "Book '{$trans['book_name']}' returned successfully!";
-    header("Location: borrow.php");
-    exit();
-}
-
-// ------------------------
-// DELETE TRANSACTION
-// ------------------------
-if (isset($_POST['delete'])) {
-    $transaction_id = intval($_POST['transaction_id']);
-
-    // Check if transaction exists
-    $stmt = $conn->prepare("SELECT transaction_id FROM transactions WHERE transaction_id = ?");
-    $stmt->bind_param("i", $transaction_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows == 0) {
-        $_SESSION['error'] = "Transaction not found.";
-    } else {
-        $stmt_del = $conn->prepare("DELETE FROM transactions WHERE transaction_id = ?");
-        $stmt_del->bind_param("i", $transaction_id);
-        if ($stmt_del->execute()) {
-            $_SESSION['message'] = "Transaction deleted successfully!";
-        } else {
-            $_SESSION['error'] = "Failed to delete transaction: " . $stmt_del->error;
-        }
-        $stmt_del->close();
-    }
-    $stmt->close();
     header("Location: borrow.php");
     exit();
 }
@@ -158,7 +132,23 @@ $borrowed = $conn->query("
 <head>
 <meta charset="UTF-8">
 <title>Borrow / Return Books</title>
-<link rel="stylesheet" href="borrow.css">
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; display:flex; background:#f0f0f0;}
+.sidebar { width:200px; background:#2c3e50; color:#fff; padding:20px; height:100vh; }
+.sidebar h2 { margin-bottom:20px; }
+.sidebar ul { list-style:none; padding:0; }
+.sidebar ul li { margin:10px 0; }
+.sidebar ul li a { color:#fff; text-decoration:none; }
+.sidebar ul li a.active { font-weight:bold; }
+.main { flex:1; padding:20px; }
+table { border-collapse: collapse; width:100%; margin-top:10px; }
+table, th, td { border:1px solid #ccc; }
+th, td { padding:8px; text-align:left; }
+input[type=text], input[type=number] { width:100%; padding:5px; margin:3px 0; }
+button { padding:5px 10px; margin-top:5px; cursor:pointer; }
+.message { color:green; }
+.error { color:red; }
+</style>
 </head>
 <body>
 
@@ -166,10 +156,10 @@ $borrowed = $conn->query("
 <aside class="sidebar">
     <h2>ADMIN</h2>
     <ul>
-        <li><a href="index.php"> Books</a></li>
-        <li><a href="borrow.php">Borrow / Return</a></li>
-        <li><a href="Transaction.php" class="active"> Transaction History</a></li>
-        <li><a href="logout.php"> Logout</a></li>
+        <li><a href="index.php">Items</a></li>
+        <li><a href="borrow.php" class="active">Borrow / Return</a></li>
+        <li><a href="Transaction.php">Transaction History</a></li>
+        <li><a href="logout.php">Logout</a></li>
     </ul>
 </aside>
 
@@ -179,10 +169,10 @@ $borrowed = $conn->query("
 <h1>Borrow / Return Books</h1>
 
 <?php if (isset($_SESSION['message'])): ?>
-    <p style="color:green;"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
+    <p class="message"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
 <?php endif; ?>
 <?php if (isset($_SESSION['error'])): ?>
-    <p style="color:red;"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+    <p class="error"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
 <?php endif; ?>
 
 <!-- Manual Borrow Form -->
@@ -197,9 +187,9 @@ $borrowed = $conn->query("
 </form>
 
 <!-- Borrowed Books Table -->
-<h2>Return / Delete Borrowed Books</h2>
+<h2>Return Books</h2>
 <input type="text" id="returnSearch" placeholder="Search borrowed books..." onkeyup="searchTable('returnSearch', 'returnTable')">
-<table id="returnTable" border="1" cellpadding="5" cellspacing="0">
+<table id="returnTable">
 <thead>
 <tr>
     <th>Book Name</th>
@@ -209,7 +199,7 @@ $borrowed = $conn->query("
     <th>Student</th>
     <th>Course / Year</th>
     <th>Borrowed Since</th>
-    <th>Actions</th>
+    <th>Action</th>
 </tr>
 </thead>
 <tbody>
@@ -220,18 +210,12 @@ $borrowed = $conn->query("
     <td><?= htmlspecialchars($row['isbn'] ?: '—') ?></td>
     <td><?= htmlspecialchars($row['category']) ?></td>
     <td><?= htmlspecialchars($row['student_name']) ?></td>
-    <td><?= htmlspecialchars($row['course']) ?> / <?= $row['year'] ?></td>
+    <td><?= htmlspecialchars($row['course']) ?> / <?= htmlspecialchars($row['year']) ?></td>
     <td><?= $row['date_borrowed'] ?></td>
     <td>
-        <!-- Return Button -->
-        <form method="POST" style="display:inline;" onsubmit="return confirm('Mark this book as returned?');">
+        <form method="POST" onsubmit="return confirm('Mark this book as returned?');">
             <input type="hidden" name="transaction_id" value="<?= $row['transaction_id'] ?>">
             <button type="submit" name="return">Return</button>
-        </form>
-        <!-- Delete Button -->
-        <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this transaction?');">
-            <input type="hidden" name="transaction_id" value="<?= $row['transaction_id'] ?>">
-            <button type="submit" name="delete" style="background:red; color:white;">Delete</button>
         </form>
     </td>
 </tr>

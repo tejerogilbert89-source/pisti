@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 // Load all transactions ordered by Transaction_id DESC
-$transactions = $conn->query("SELECT * FROM transaction ORDER BY Transaction_id DESC");
+$transactions = $conn->query("SELECT * FROM transactions ORDER BY Transaction_id DESC");
 ?>
 <!DOCTYPE html>
 <html lang="en">

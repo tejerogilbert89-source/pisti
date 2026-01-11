@@ -158,7 +158,7 @@ $borrowed = $conn->query("
 <head>
 <meta charset="UTF-8">
 <title>Borrow / Return Books</title>
-<link rel="stylesheet" href="borrow.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 

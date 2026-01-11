@@ -25,6 +25,7 @@ $stmt = $conn->prepare("SELECT * FROM books WHERE book_id=? LIMIT 1");
 $stmt->bind_param("i", $book_id);
 $stmt->execute();
 $book = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
 if (!$book) {
     die("Book not found.");
@@ -37,12 +38,16 @@ if (!$book) {
 */
 if (isset($_POST['updateItem'])) {
 
-    $name     = trim($_POST['itemName']);
-    $category = trim($_POST['itemCategory']);
-    $author   = trim($_POST['itemAuthor']);
-    $isbn     = trim($_POST['itemISBN']);
-    $status   = trim($_POST['itemStatus']);
-    $quantity = (int)$_POST['itemQuantity'];
+    $name            = trim($_POST['itemName']);
+    $category        = trim($_POST['itemCategory']);
+    $author          = trim($_POST['itemAuthor']);
+    $isbn            = trim($_POST['itemISBN']);
+    $status          = trim($_POST['itemStatus']);
+    $quantity        = (int)$_POST['itemQuantity'];
+    $accession       = trim($_POST['itemAccession']);
+    $copy            = trim($_POST['itemCopy']);
+    $book_year       = trim($_POST['itemYear']);
+    $masterlist      = trim($_POST['itemMasterlist']);
 
     // Prevent negative quantity
     if ($quantity < 0) {
@@ -56,20 +61,26 @@ if (isset($_POST['updateItem'])) {
 
     $update = $conn->prepare("
         UPDATE books 
-        SET book_name=?, category=?, author=?, isbn=?, status=?, volume=?
+        SET book_name=?, category=?, author=?, isbn=?, status=?, volume=?,
+            Accession_Number=?, Copy=?, Book_Year=?, Masterlist=?
         WHERE book_id=?
     ");
     $update->bind_param(
-        "sssssii",
+        "ssssisssssi",
         $name,
         $category,
         $author,
         $isbn,
         $status,
         $quantity,
+        $accession,
+        $copy,
+        $book_year,
+        $masterlist,
         $book_id
     );
     $update->execute();
+    $update->close();
 
     header("Location: index.php?updated=1");
     exit();
@@ -134,6 +145,23 @@ if (isset($_POST['updateItem'])) {
                 <label>Quantity</label>
                 <input type="number" name="itemQuantity" min="0"
                        value="<?= (int)$book['volume'] ?>" required>
+
+                <!-- New Fields -->
+                <label>Accession Number</label>
+                <input type="text" name="itemAccession"
+                       value="<?= htmlspecialchars($book['Accession_Number'] ?? '') ?>">
+
+                <label>Copy</label>
+                <input type="text" name="itemCopy"
+                       value="<?= htmlspecialchars($book['Copy'] ?? '') ?>">
+
+                <label>Book Year</label>
+                <input type="text" name="itemYear"
+                       value="<?= htmlspecialchars($book['Book_Year'] ?? '') ?>">
+
+                <label>Masterlist</label>
+                <input type="text" name="itemMasterlist"
+                       value="<?= htmlspecialchars($book['Masterlist'] ?? '') ?>">
 
                 <button type="submit" name="updateItem">Save Changes</button>
                 <a href="index.php">Cancel</a>

@@ -168,7 +168,7 @@ $borrowed = $conn->query("
     <ul>
         <li><a href="index.php"> Books</a></li>
         <li><a href="borrow.php">Borrow / Return</a></li>
-        <li><a href="Transaction.php" class="active"> Transaction History</a></li>
+        <li><a href="Transaction.php"> Transaction History</a></li>
         <li><a href="logout.php"> Logout</a></li>
     </ul>
 </aside>

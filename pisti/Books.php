@@ -20,19 +20,20 @@ SELECT
     t.date_borrowed,
 
     -- Reserve info
-    r.student_name AS reserver_name,
-    r.student_id   AS reserver_id
+    r.student_name  AS reserver_name,
+    r.student_id    AS reserver_id,
+    r.reserve_date
 
 FROM books b
 
--- Borrow joins
+-- Borrow joins (only active borrow)
 LEFT JOIN transactions t 
     ON b.book_id = t.book_id 
    AND t.date_returned IS NULL
 LEFT JOIN students sb 
     ON t.student_id = sb.student_id
 
--- Reservation joins
+-- Reservation join (latest reservation only)
 LEFT JOIN reservations r 
     ON b.book_id = r.book_id
 
@@ -47,7 +48,7 @@ $books = $conn->query($sql);
 <head>
 <meta charset="UTF-8">
 <title>Books</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="book.css">
 </head>
 <body>
 
@@ -79,6 +80,7 @@ $books = $conn->query($sql);
     <th>Qty</th>
     <th>Borrowed By</th>
     <th>Reserved By</th>
+    <th>Reserve Date</th>
     <th>Reserve</th>
 </tr>
 
@@ -94,24 +96,31 @@ $books = $conn->query($sql);
 
     <!-- Borrower -->
     <td>
-        <?= $row['borrower_name'] 
+        <?= $row['borrower_name']
             ? htmlspecialchars($row['borrower_name']) . " ({$row['borrower_id']})"
             : "—"; ?>
     </td>
 
     <!-- Reserver -->
     <td>
-        <?= $row['reserver_name'] 
+        <?= $row['reserver_name']
             ? htmlspecialchars($row['reserver_name']) . " ({$row['reserver_id']})"
             : "—"; ?>
     </td>
 
-    <!-- Reserve icon -->
+    <!-- Reserve Date -->
+    <td>
+        <?= $row['reserve_date']
+            ? date("M d, Y", strtotime($row['reserve_date']))
+            : "—"; ?>
+    </td>
+
+    <!-- Reserve Button -->
     <td style="text-align:center;">
         <?php if ($row['status'] === 'Available' && !$row['reserver_id']): ?>
-            <form method="GET" action="reserve.php" title="Reserve Book">
+            <form method="GET" action="reserve.php">
                 <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
-                <button type="submit" style="border:none;background:none;font-size:18px;">RESERVE</button>
+                <button type="submit">RESERVE</button>
             </form>
         <?php else: ?>
             —

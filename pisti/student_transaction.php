@@ -35,7 +35,7 @@ $transactions = $conn->query($sql);
 <html>
 <head>
     <title>Student Transaction </title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="book.css">
 </head>
 <body>
 

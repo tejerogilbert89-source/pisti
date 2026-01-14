@@ -72,9 +72,9 @@ $books = $conn->query($sql);
 <table id="bookTable" border="1" cellpadding="5" cellspacing="0">
 <tr>
     <th>ID</th>
-    <th>Book</th>
+    <th>Title</th>
     <th>Author</th>
-    <th>ISBN</th>
+
     <th>Category</th>
     <th>Status</th>
     <th>Qty</th>
@@ -87,9 +87,8 @@ $books = $conn->query($sql);
 <?php while ($row = $books->fetch_assoc()): ?>
 <tr>
     <td><?= $row['book_id'] ?></td>
-    <td><?= htmlspecialchars($row['book_name']) ?></td>
+    <td><?= htmlspecialchars($row['Title']) ?></td>
     <td><?= htmlspecialchars($row['Author']) ?></td>
-    <td><?= htmlspecialchars($row['ISBN']) ?></td>
     <td><?= htmlspecialchars($row['category']) ?></td>
     <td><?= htmlspecialchars($row['status']) ?></td>
     <td><?= $row['volume'] ?></td>

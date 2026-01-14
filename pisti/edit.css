@@ -1,0 +1,170 @@
+/* ===========================
+   GLOBAL RESET
+=========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+}
+
+body {
+    background: #f4f7f6;
+    color: #333;
+}
+
+/* ===========================
+   LAYOUT
+=========================== */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===========================
+   SIDEBAR
+=========================== */
+.sidebar {
+    width: 240px;
+    background: linear-gradient(180deg, #0a7a50, #066a41);
+    color: #fff;
+    padding: 25px 20px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 12px 15px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===========================
+   TOP BAR
+=========================== */
+.topbar {
+    background: #fff;
+    padding: 18px 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.topbar h1 {
+    font-size: 22px;
+    color: #0a7a50;
+}
+
+/* ===========================
+   PAGE INNER
+=========================== */
+.page-inner {
+    padding: 30px;
+}
+
+/* ===========================
+   FORM CARD
+=========================== */
+.item-form {
+    max-width: 600px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.item-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 15px;
+}
+
+.item-form input,
+.item-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border 0.3s;
+}
+
+.item-form input:focus,
+.item-form select:focus {
+    border-color: #0a7a50;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+.item-form button {
+    margin-top: 25px;
+    background: #0a7a50;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.item-form button:hover {
+    background: #066a41;
+}
+
+.item-form a {
+    display: inline-block;
+    margin-left: 15px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.item-form a:hover {
+    color: #0a7a50;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .page-inner {
+        padding: 20px;
+    }
+
+    .item-form {
+        width: 100%;
+    }
+}

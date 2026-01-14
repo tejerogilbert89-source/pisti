@@ -17,7 +17,7 @@ body {
     width: 250px;
     background: linear-gradient(180deg, #0a7a50, #066a41);
     color: #fff;
-    padding: 20px;
+    
     display: flex;
     flex-direction: column;
     gap: 15px;

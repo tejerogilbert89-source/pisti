@@ -1,84 +1,99 @@
 <?php
 session_start();
-include "db.php";
 
-// Redirect if not logged in
+/* ===============================
+   DATABASE CONNECTION
+================================ */
+$servername = "localhost";
+$username   = "root";
+$password   = "";
+$dbname     = "school_inventory";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+/* ===============================
+   LOGIN CHECK
+================================ */
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-// REQUIRE book_id
+/* ===============================
+   REQUIRE book_id
+================================ */
 if (!isset($_GET['book_id'])) {
     header("Location: index.php");
     exit();
 }
 
-$book_id = intval($_GET['book_id']);
+$book_id = (int)$_GET['book_id'];
 
-/*
-=================================
- GET BOOK INFO
-=================================
-*/
-$stmt = $conn->prepare("SELECT * FROM books WHERE book_id=? LIMIT 1");
+/* ===============================
+   GET BOOK INFO
+================================ */
+$stmt = $conn->prepare("SELECT * FROM books WHERE book_id = ? LIMIT 1");
 $stmt->bind_param("i", $book_id);
 $stmt->execute();
-$book = $stmt->get_result()->fetch_assoc();
+$result = $stmt->get_result();
+$book = $result->fetch_assoc();
 $stmt->close();
 
 if (!$book) {
     die("Book not found.");
 }
 
-/*
-=================================
- UPDATE BOOK
-=================================
-*/
+/* ===============================
+   UPDATE BOOK
+================================ */
 if (isset($_POST['updateItem'])) {
 
-    $name            = trim($_POST['itemName']);
-    $category        = trim($_POST['itemCategory']);
-    $author          = trim($_POST['itemAuthor']);
-    $isbn            = trim($_POST['itemISBN']);
-    $status          = trim($_POST['itemStatus']);
-    $quantity        = (int)$_POST['itemQuantity'];
-    $accession       = trim($_POST['itemAccession']);
-    $copy            = trim($_POST['itemCopy']);
-    $book_year       = trim($_POST['itemYear']);
-    $masterlist      = trim($_POST['itemMasterlist']);
+    $title       = trim($_POST['itemName']);
+    $category    = trim($_POST['itemCategory']);
+    $author      = trim($_POST['itemAuthor']);
+    $status      = trim($_POST['itemStatus']);
+    $volume      = (int)$_POST['itemQuantity'];
+    $accession   = trim($_POST['itemAccession']);
+    $book_year   = (int)$_POST['itemYear'];
+    $masterlist  = trim($_POST['itemMasterlist']);
 
-    // Prevent negative quantity
-    if ($quantity < 0) {
-        $quantity = 0;
+    if ($volume < 0) {
+        $volume = 0;
     }
 
-    // Auto-fix status based on quantity
-    if ($quantity == 0) {
-        $status = 'Out of Stock';
+    if ($volume == 0) {
+        $status = "Out of Stock";
     }
 
     $update = $conn->prepare("
-        UPDATE books 
-        SET book_name=?, category=?, author=?, isbn=?, status=?, volume=?,
-            Accession_Number=?, Copy=?, Book_Year=?, Masterlist=?
-        WHERE book_id=?
+        UPDATE books
+        SET Title = ?,
+            category = ?,
+            Author = ?,
+            status = ?,
+            volume = ?,
+            Accession_Number = ?,
+            Book_Year = ?,
+            Masterlist = ?
+        WHERE book_id = ?
     ");
+
     $update->bind_param(
-        "ssssisssssi",
-        $name,
+        "ssssiiisi",
+        $title,
         $category,
         $author,
-        $isbn,
         $status,
-        $quantity,
+        $volume,
         $accession,
-        $copy,
         $book_year,
         $masterlist,
         $book_id
     );
+
     $update->execute();
     $update->close();
 
@@ -92,7 +107,7 @@ if (isset($_POST['updateItem'])) {
 <head>
 <meta charset="UTF-8">
 <title>Edit Book</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="reserve.css">
 </head>
 <body>
 
@@ -109,66 +124,50 @@ if (isset($_POST['updateItem'])) {
     </aside>
 
     <main class="main">
+        <h1>Edit Book</h1>
 
-        <header class="topbar">
-            <h1>Edit Book</h1>
-        </header>
+        <form method="POST">
 
-        <section class="page-inner">
+            <label>Title</label>
+            <input type="text" name="itemName"
+                   value="<?= htmlspecialchars($book['Title']) ?>" required>
 
-            <form method="POST" class="item-form">
+            <label>Category</label>
+            <input type="text" name="itemCategory"
+                   value="<?= htmlspecialchars($book['category']) ?>" required>
 
-                <label>Book Name</label>
-                <input type="text" name="itemName"
-                       value="<?= htmlspecialchars($book['book_name']) ?>" required>
+            <label>Author</label>
+            <input type="text" name="itemAuthor"
+                   value="<?= htmlspecialchars($book['Author']) ?>" required>
 
-                <label>Category</label>
-                <input type="text" name="itemCategory"
-                       value="<?= htmlspecialchars($book['category']) ?>" required>
+            <label>Status</label>
+            <select name="itemStatus">
+                <option value="Available" <?= $book['status']=="Available" ? "selected" : "" ?>>Available</option>
+                <option value="Borrowed" <?= $book['status']=="Borrowed" ? "selected" : "" ?>>Borrowed</option>
+                <option value="Defective" <?= $book['status']=="Defective" ? "selected" : "" ?>>Defective</option>
+                <option value="Out of Stock" <?= $book['status']=="Out of Stock" ? "selected" : "" ?>>Out of Stock</option>
+            </select>
 
-                <label>Author</label>
-                <input type="text" name="itemAuthor"
-                       value="<?= htmlspecialchars($book['Author']) ?>" required>
+            <label>Quantity</label>
+            <input type="number" name="itemQuantity" min="0"
+                   value="<?= (int)$book['volume'] ?>" required>
 
-                <label>ISBN</label>
-                <input type="text" name="itemISBN"
-                       value="<?= htmlspecialchars($book['ISBN']) ?>" required>
+            <label>Accession Number</label>
+            <input type="text" name="itemAccession"
+                   value="<?= htmlspecialchars($book['Accession_Number']) ?>">
 
-                <label>Status</label>
-                <select name="itemStatus">
-                    <option value="Available" <?= $book['status']=="Available" ? "selected" : "" ?>>Available</option>
-                    <option value="Borrowed" <?= $book['status']=="Borrowed" ? "selected" : "" ?>>Borrowed</option>
-                    <option value="Defective" <?= $book['status']=="Defective" ? "selected" : "" ?>>Defective</option>
-                    <option value="Out of Stock" <?= $book['status']=="Out of Stock" ? "selected" : "" ?>>Out of Stock</option>
-                </select>
+            <label>Book Year</label>
+            <input type="number" name="itemYear"
+                   value="<?= (int)$book['Book_Year'] ?>">
 
-                <label>Quantity</label>
-                <input type="number" name="itemQuantity" min="0"
-                       value="<?= (int)$book['volume'] ?>" required>
+            <label>Masterlist</label>
+            <input type="text" name="itemMasterlist"
+                   value="<?= htmlspecialchars($book['Masterlist']) ?>">
 
-                <!-- New Fields -->
-                <label>Accession Number</label>
-                <input type="text" name="itemAccession"
-                       value="<?= htmlspecialchars($book['Accession_Number'] ?? '') ?>">
+            <button type="submit" name="updateItem">Save Changes</button>
+            <a href="index.php">Cancel</a>
 
-                <label>Copy</label>
-                <input type="text" name="itemCopy"
-                       value="<?= htmlspecialchars($book['Copy'] ?? '') ?>">
-
-                <label>Book Year</label>
-                <input type="text" name="itemYear"
-                       value="<?= htmlspecialchars($book['Book_Year'] ?? '') ?>">
-
-                <label>Masterlist</label>
-                <input type="text" name="itemMasterlist"
-                       value="<?= htmlspecialchars($book['Masterlist'] ?? '') ?>">
-
-                <button type="submit" name="updateItem">Save Changes</button>
-                <a href="index.php">Cancel</a>
-
-            </form>
-
-        </section>
+        </form>
     </main>
 
 </div>

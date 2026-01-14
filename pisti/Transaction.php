@@ -22,7 +22,7 @@ $sql = "
            s.student_id,
            s.course,
            s.year,
-           b.book_name
+           b.Title
     FROM transactions t
     LEFT JOIN students s ON t.student_id = s.student_id
     LEFT JOIN books b ON t.book_id = b.book_id
@@ -78,7 +78,7 @@ $transactions = $conn->query($sql);
                     <td><?= htmlspecialchars($row['student_id']) ?></td>
                     <td><?= htmlspecialchars($row['course']) ?></td>
                     <td><?= htmlspecialchars($row['year']) ?></td>
-                    <td><?= htmlspecialchars($row['book_name']) ?></td>
+                    <td><?= htmlspecialchars($row['Title']) ?></td>
                     <td><?= htmlspecialchars($row['quantity']) ?></td>
                 </tr>
             <?php endwhile; ?>

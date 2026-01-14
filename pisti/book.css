@@ -1,26 +1,23 @@
 /* ===========================
-   GLOBAL STYLING
+   GLOBAL RESET
 =========================== */
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
-    background-color: #f4f7f6;
+* {
     margin: 0;
     padding: 0;
-    display: flex; /* sidebar left, main content right */
-    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+}
+
+body {
+    background: linear-gradient(120deg, #eef5f1, #f6fbf8);
 }
 
 /* ===========================
-   CONTAINER
+   LAYOUT
 =========================== */
 .container {
     display: flex;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto; /* center horizontally */
-    gap: 20px;
-    padding: 20px;
-    box-sizing: border-box;
+    min-height: 100vh;
 }
 
 /* ===========================
@@ -28,46 +25,41 @@ body {
 =========================== */
 .sidebar {
     width: 250px;
-    background: linear-gradient(180deg, #0a7a50, #066a41);
+    background: linear-gradient(180deg, #0b7d4f, #044b2f);
     color: #fff;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    border-radius: 12px;
-    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
-    min-height: calc(100vh - 40px); /* full height minus container padding */
+    padding: 25px 20px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
 }
 
 .sidebar h2 {
     text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 35px;
+    font-size: 22px;
+    letter-spacing: 1px;
 }
 
 .sidebar ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 .sidebar ul li {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
     display: block;
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 13px 16px;
+    color: #eaf7f1;
+    text-decoration: none;
+    border-radius: 10px;
     transition: all 0.3s ease;
 }
 
 .sidebar ul li a.active,
 .sidebar ul li a:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateX(5px);
+    background: rgba(255,255,255,0.25);
+    color: #ffffff;
+    transform: translateX(4px);
 }
 
 /* ===========================
@@ -75,222 +67,142 @@ body {
 =========================== */
 .main {
     flex: 1;
-    padding: 30px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* center content */
-    min-width: 0; /* prevent overflow */
+    padding: 30px 40px;
 }
 
 /* ===========================
-   HEADINGS
+   PAGE TITLE
 =========================== */
-.main h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
+.page-title {
     text-align: center;
-    color: #0a7a50;
-}
-
-.main h2 {
-    font-size: 22px;
-    margin-bottom: 15px;
-    color: #066a41;
+    font-size: 28px;
+    color: #0b7d4f;
+    margin-bottom: 25px;
+    font-weight: 700;
 }
 
 /* ===========================
-   SEARCH BOX
+   SEARCH BAR
 =========================== */
-#search {
-    width: 100%;
-    max-width: 600px;
-    padding: 10px 12px;
-    margin-bottom: 20px;
+.search-box {
+    margin-bottom: 18px;
+}
+
+.search-box input {
+    padding: 8px 14px;
     border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-/* ===========================
-   TABLE STYLING
-=========================== */
-table {
-    width: 100%;
-    max-width: 1000px;
-    border-collapse: collapse;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-    background: #fff;
-    margin-bottom: 20px;
-}
-
-table th, table td {
-    padding: 12px 15px;
-    text-align: left;
-}
-
-table th {
-    background: #0a7a50;
-    color: #fff;
-    font-weight: 600;
-}
-
-table tr:nth-child(even) {
-    background: #f8faf8;
-}
-
-table tr:hover {
-    background: #e6f4ed;
-}
-
-/* ===========================
-   TABLE BUTTONS
-=========================== */
-td form button,
-td a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 10px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    background: linear-gradient(145deg, #0a7a50, #0c8b60);
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    margin-right: 6px;
-}
-
-td form button:hover,
-td a:hover {
-    background: linear-gradient(145deg, #066a41, #08845a);
-    transform: translateY(-1px) scale(1.05);
-}
-
-td a[style*="background:red"] {
-    background: #ef4444;
-    color: #fff;
-}
-
-td a[style*="background:red"]:hover {
-    background: #dc2626;
-    transform: translateY(-1px) scale(1.05);
-}
-
-/* ===========================
-   FORM STYLING
-=========================== */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    max-width: 600px;
-}
-
-form input,
-form select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-form button {
-    background: linear-gradient(145deg, #0a7a50, #0c8b60);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 22px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid #b6d6c6;
+    outline: none;
     transition: all 0.3s ease;
 }
 
-form button:hover {
-    background: linear-gradient(145deg, #066a41, #08845a);
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+.search-box input:focus {
+    border-color: #0b7d4f;
+    box-shadow: 0 0 0 3px rgba(11,125,79,0.15);
 }
 
 /* ===========================
-   MESSAGES
+   TABLE CARD
 =========================== */
-p.message {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px 15px;
-    border-radius: 8px;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
-p.success {
-    background-color: #d1fae5;
-    color: #065f46;
-}
-
-p.error {
-    background-color: #fee2e2;
-    color: #b91c1c;
+.table-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow: hidden;
+    max-width: 1100px;
+    margin: auto;
 }
 
 /* ===========================
-   RESPONSIVE DESIGN
+   TABLE
+=========================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+/* ===========================
+   TABLE HEADER
+=========================== */
+thead {
+    background: linear-gradient(90deg, #0b7d4f, #129f67);
+    color: #fff;
+}
+
+thead th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===========================
+   TABLE BODY
+=========================== */
+tbody tr {
+    transition: background 0.25s ease;
+}
+
+tbody tr:nth-child(even) {
+    background: #f4fbf7;
+}
+
+tbody tr:hover {
+    background: #e0f4eb;
+}
+
+tbody td {
+    padding: 13px 12px;
+    color: #333;
+}
+
+/* ===========================
+   HIGHLIGHT COLUMNS
+=========================== */
+tbody td:nth-child(1) {
+    font-weight: 700;
+    color: #0b7d4f;
+}
+
+tbody td:nth-child(9) {
+    text-align: center;
+    font-weight: 700;
+    color: #0b7d4f;
+}
+
+/* ===========================
+   STATUS COLORS (OPTIONAL)
+=========================== */
+.status-returned {
+    color: #0b7d4f;
+    font-weight: 700;
+}
+
+.status-borrowed {
+    color: #d97706;
+    font-weight: 700;
+}
+
+.status-overdue {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+/* ===========================
+   RESPONSIVE
 =========================== */
 @media (max-width: 900px) {
-    body {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .container {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-        gap: 10px;
-    }
-
     .sidebar {
-        width: 100%;
-        flex-direction: row;
-        justify-content: space-around;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        min-height: auto;
+        display: none;
     }
 
     .main {
-        width: 95%;
-        padding: 15px;
+        padding: 20px;
     }
 
-    td form button,
-    td a {
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 6px;
-    }
-
-    table th, table td {
-        padding: 8px 10px;
-        font-size: 12px;
-    }
-
-    #search {
-        width: 95%;
+    table {
+        font-size: 13px;
     }
 }

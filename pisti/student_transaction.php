@@ -3,7 +3,7 @@ session_start();
 include "db.php";
 
 /* ===============================
-   ADMIN CHECK
+   STUDENT CHECK
 ================================ */
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
@@ -17,12 +17,11 @@ $sql = "
     SELECT t.transaction_id,
            t.date_borrowed,
            t.date_returned,
-           t.quantity,
            s.student_name,
            s.student_id,
            s.course,
            s.year,
-           b.book_name
+           b.Title
     FROM transactions t
     LEFT JOIN students s ON t.student_id = s.student_id
     LEFT JOIN books b ON t.book_id = b.book_id
@@ -34,28 +33,26 @@ $transactions = $conn->query($sql);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Transaction </title>
-    <link rel="stylesheet" href="book.css">
+    <title>Student Transaction</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <aside class="sidebar">
     <h2>STUDENT</h2>
     <ul>
-        
         <li><a href="Books.php">BOOKS</a></li>
-        <li><a href="student_transaction.php" class="active">Student Transaction </a></li>
-        <li><a href="logout.php"> Logout</a></li>
+        <li><a href="student_transaction.php" class="active">Student Transaction</a></li>
+        <li><a href="logout.php">Logout</a></li>
     </ul>
 </aside>
 
 <div class="main">
-    <h1> Student Transaction </h1>
-    <link rel="stylesheet" href="style.css">
+    <h1>Student Transaction</h1>
 
     <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchTable()">
 
-    <table id="transactionTable">
+    <table id="transactionTable" border="1" cellpadding="5" cellspacing="0">
         <thead>
             <tr>
                 <th>ID</th>
@@ -73,14 +70,14 @@ $transactions = $conn->query($sql);
             <?php while($row = $transactions->fetch_assoc()): ?>
                 <tr>
                     <td><?= htmlspecialchars($row['transaction_id']) ?></td>
-                    <td><?= htmlspecialchars($row['date_borrowed']) ?></td>
-                    <td><?= htmlspecialchars($row['date_returned'] ?? '-') ?></td>
+                    <td><?= $row['date_borrowed'] ? date("M d, Y", strtotime($row['date_borrowed'])) : '-' ?></td>
+                    <td><?= $row['date_returned'] ? date("M d, Y", strtotime($row['date_returned'])) : '-' ?></td>
                     <td><?= htmlspecialchars($row['student_name']) ?></td>
                     <td><?= htmlspecialchars($row['student_id']) ?></td>
                     <td><?= htmlspecialchars($row['course']) ?></td>
                     <td><?= htmlspecialchars($row['year']) ?></td>
-                    <td><?= htmlspecialchars($row['book_name']) ?></td>
-                    <td><?= htmlspecialchars($row['quantity']) ?></td>
+                    <td><?= htmlspecialchars($row['Title']) ?></td>
+                    <td>1</td>
                 </tr>
             <?php endwhile; ?>
         </tbody>
@@ -90,8 +87,7 @@ $transactions = $conn->query($sql);
 <script>
 function searchTable() {
     let input = document.getElementById("searchInput").value.toLowerCase();
-    let rows = document.querySelectorAll("#transactionTable tbody tr");
-    rows.forEach(row => {
+    document.querySelectorAll("#transactionTable tbody tr").forEach(row => {
         row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
     });
 }

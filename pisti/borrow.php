@@ -1,16 +1,31 @@
 <?php
 session_start();
-include "db.php";
 
-// Only allow admin
+/* ===============================
+   DATABASE CONNECTION
+================================ */
+$servername = "localhost";
+$username   = "root";
+$password   = "";
+$dbname     = "school_inventory";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+/* ===============================
+   ADMIN CHECK
+================================ */
 if (!isset($_SESSION['username']) || $_SESSION['username'] != "admin") {
     header("Location: login.php");
     exit();
 }
 
-// ------------------------
-// BORROW BOOK
-// ------------------------
+/* ===============================
+   BORROW BOOK
+================================ */
 if (isset($_POST['borrow'])) {
     $book_id = intval($_POST['book_id']);
     $student_id = intval($_POST['student_id']);
@@ -18,8 +33,8 @@ if (isset($_POST['borrow'])) {
     $course = trim($_POST['course']);
     $year = trim($_POST['year']);
 
-    // Check book
-    $stmt = $conn->prepare("SELECT book_name, volume, status FROM books WHERE book_id = ?");
+    // Check book availability
+    $stmt = $conn->prepare("SELECT Title, volume, status FROM books WHERE book_id = ?");
     $stmt->bind_param("i", $book_id);
     $stmt->execute();
     $bookResult = $stmt->get_result();
@@ -32,7 +47,7 @@ if (isset($_POST['borrow'])) {
     $stmt->close();
 
     if ($book['volume'] <= 0 || $book['status'] == 'Out of Stock') {
-        $_SESSION['error'] = "Book '{$book['book_name']}' is not available.";
+        $_SESSION['error'] = "Book '{$book['Title']}' is not available.";
         header("Location: borrow.php");
         exit();
     }
@@ -50,7 +65,7 @@ if (isset($_POST['borrow'])) {
     }
     $stmt->close();
 
-    // Insert transaction
+    // Borrow book
     $stmt = $conn->prepare("INSERT INTO transactions (book_id, student_id, date_borrowed) VALUES (?, ?, NOW())");
     $stmt->bind_param("ii", $book_id, $student_id);
     if ($stmt->execute()) {
@@ -61,7 +76,7 @@ if (isset($_POST['borrow'])) {
         $updateStmt->execute();
         $updateStmt->close();
 
-        $_SESSION['message'] = "Book '{$book['book_name']}' borrowed by {$student_name} successfully!";
+        $_SESSION['message'] = "Book '{$book['Title']}' borrowed by {$student_name} successfully!";
         header("Location: borrow.php");
         exit();
     } else {
@@ -70,14 +85,14 @@ if (isset($_POST['borrow'])) {
     $stmt->close();
 }
 
-// ------------------------
-// RETURN BOOK
-// ------------------------
+/* ===============================
+   RETURN BOOK
+================================ */
 if (isset($_POST['return'])) {
     $transaction_id = intval($_POST['transaction_id']);
 
     $stmt = $conn->prepare("
-        SELECT t.book_id, b.book_name, b.volume
+        SELECT t.book_id, b.Title, b.volume
         FROM transactions t
         JOIN books b ON t.book_id = b.book_id
         WHERE t.transaction_id = ? AND t.date_returned IS NULL
@@ -105,18 +120,17 @@ if (isset($_POST['return'])) {
     $stmt->execute();
     $stmt->close();
 
-    $_SESSION['message'] = "Book '{$trans['book_name']}' returned successfully!";
+    $_SESSION['message'] = "Book '{$trans['Title']}' returned successfully!";
     header("Location: borrow.php");
     exit();
 }
 
-// ------------------------
-// DELETE TRANSACTION
-// ------------------------
+/* ===============================
+   DELETE TRANSACTION
+================================ */
 if (isset($_POST['delete'])) {
     $transaction_id = intval($_POST['transaction_id']);
 
-    // Check if transaction exists
     $stmt = $conn->prepare("SELECT transaction_id FROM transactions WHERE transaction_id = ?");
     $stmt->bind_param("i", $transaction_id);
     $stmt->execute();
@@ -138,13 +152,12 @@ if (isset($_POST['delete'])) {
     exit();
 }
 
-// Fetch all books
-$books = $conn->query("SELECT book_id, book_name, author, isbn, category, volume, status FROM books ORDER BY book_name ASC");
-
-// Fetch borrowed books
+/* ===============================
+   FETCH BOOKS & BORROWED BOOKS
+================================ */
+$books = $conn->query("SELECT * FROM books ORDER BY Title ASC");
 $borrowed = $conn->query("
-    SELECT t.transaction_id, t.date_borrowed, b.book_name, b.author, b.isbn, b.category,
-           s.student_name, s.course, s.year
+    SELECT t.transaction_id, t.date_borrowed, b.*, s.student_name, s.course, s.year
     FROM transactions t
     JOIN books b ON t.book_id = b.book_id
     JOIN students s ON t.student_id = s.student_id
@@ -162,50 +175,50 @@ $borrowed = $conn->query("
 </head>
 <body>
 
-<!-- Sidebar -->
 <aside class="sidebar">
     <h2>ADMIN</h2>
     <ul>
-        <li><a href="index.php"> Books</a></li>
-        <li><a href="borrow.php">Borrow / Return</a></li>
-        <li><a href="Transaction.php"> Transaction History</a></li>
-        <li><a href="logout.php"> Logout</a></li>
+        <li><a href="index.php">Books</a></li>
+        <li><a class="active" href="borrow.php">Borrow / Return</a></li>
+        <li><a href="Transaction.php">Transaction History</a></li>
+        <li><a href="logout.php">Logout</a></li>
     </ul>
 </aside>
 
-<!-- Main content -->
 <main class="main">
-
 <h1>Borrow / Return Books</h1>
 
 <?php if (isset($_SESSION['message'])): ?>
-    <p style="color:green;"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
+<p style="color:green;"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
 <?php endif; ?>
 <?php if (isset($_SESSION['error'])): ?>
-    <p style="color:red;"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+<p style="color:red;"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
 <?php endif; ?>
 
-<!-- Manual Borrow Form -->
 <h2>Manual Borrow</h2>
 <form method="POST">
-    <label>Student Name: <input type="text" name="student_name" required></label><br>
-    <label>Student ID: <input type="number" name="student_id" required></label><br>
+    <label>Student Name:
+        <input type="text" name="student_name" placeholder="First Name/    Middle Name/    Last Name/" required>
+    </label><br>
+    <label>Student ID: <input type="number" name="student_id"placeholder="Student 7num/   Teachers 5num/"  required></label><br>
     <label>Course: <input type="text" name="course" required></label><br>
     <label>Year: <input type="text" name="year" required></label><br>
     <label>Book ID: <input type="number" name="book_id" required></label><br>
     <button type="submit" name="borrow">Borrow Book</button>
 </form>
 
-<!-- Borrowed Books Table -->
-<h2>Return / Delete Borrowed Books</h2>
+<h2>Borrowed Books</h2>
 <input type="text" id="returnSearch" placeholder="Search borrowed books..." onkeyup="searchTable('returnSearch', 'returnTable')">
+
 <table id="returnTable" border="1" cellpadding="5" cellspacing="0">
 <thead>
 <tr>
-    <th>Book Name</th>
+    <th>Title</th>
     <th>Author</th>
-    <th>ISBN</th>
     <th>Category</th>
+    <th>Accession Number</th>
+    <th>Book Year</th>
+    <th>Masterlist</th>
     <th>Student</th>
     <th>Course / Year</th>
     <th>Borrowed Since</th>
@@ -215,23 +228,23 @@ $borrowed = $conn->query("
 <tbody>
 <?php while ($row = $borrowed->fetch_assoc()): ?>
 <tr>
-    <td><?= htmlspecialchars($row['book_name']) ?></td>
-    <td><?= htmlspecialchars($row['author'] ?: '—') ?></td>
-    <td><?= htmlspecialchars($row['isbn'] ?: '—') ?></td>
+    <td><?= htmlspecialchars($row['Title']) ?></td>
+    <td><?= htmlspecialchars($row['Author'] ?: '—') ?></td>
     <td><?= htmlspecialchars($row['category']) ?></td>
+    <td><?= htmlspecialchars($row['Accession_Number']) ?></td>
+    <td><?= htmlspecialchars($row['Book_Year']) ?></td>
+    <td><?= htmlspecialchars($row['Masterlist']) ?></td>
     <td><?= htmlspecialchars($row['student_name']) ?></td>
     <td><?= htmlspecialchars($row['course']) ?> / <?= $row['year'] ?></td>
     <td><?= $row['date_borrowed'] ?></td>
     <td>
-        <!-- Return Button -->
         <form method="POST" style="display:inline;" onsubmit="return confirm('Mark this book as returned?');">
             <input type="hidden" name="transaction_id" value="<?= $row['transaction_id'] ?>">
             <button type="submit" name="return">Return</button>
         </form>
-        <!-- Delete Button -->
-        <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this transaction?');">
+        <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this transaction?');">
             <input type="hidden" name="transaction_id" value="<?= $row['transaction_id'] ?>">
-            <button type="submit" name="delete" style="background:red; color:white;">Delete</button>
+            <button type="submit" name="delete" style="background:red;color:white;">Delete</button>
         </form>
     </td>
 </tr>

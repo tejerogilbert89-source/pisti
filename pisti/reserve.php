@@ -11,6 +11,7 @@ $dbname     = "school_inventory";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -23,11 +24,14 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+/* ===============================
+   GET BOOK ID (if any)
+================================ */
 $selected_book = $_GET['book_id'] ?? '';
-$reserve_date  = date("Y-m-d"); // TODAY'S DATE
+$reserve_date  = date("Y-m-d"); // today's date
 
 /* ===============================
-   RESERVE BOOK
+   RESERVE BOOK LOGIC
 ================================ */
 if (isset($_POST['reserve'])) {
 
@@ -38,17 +42,19 @@ if (isset($_POST['reserve'])) {
     $year         = trim($_POST['year']);
     $reserve_date = $_POST['reserve_date'];
 
+    // Prevent XSS
     $student_name = htmlspecialchars($student_name);
     $course       = htmlspecialchars($course);
     $year         = htmlspecialchars($year);
 
-    /* CHECK IF STUDENT EXISTS */
+    // Check if student exists
     $stmt = $conn->prepare("SELECT student_id FROM students WHERE student_id=?");
     $stmt->bind_param("i", $student_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows == 0) {
+        // Insert new student
         $add = $conn->prepare("
             INSERT INTO students (student_id, student_name, course, year)
             VALUES (?, ?, ?, ?)
@@ -59,7 +65,7 @@ if (isset($_POST['reserve'])) {
     }
     $stmt->close();
 
-    /* INSERT RESERVATION WITH DATE */
+    // Insert reservation
     $stmt = $conn->prepare("
         INSERT INTO reservations 
         (student_name, student_id, course, year, book_id, reserve_date)
@@ -86,8 +92,60 @@ if (isset($_POST['reserve'])) {
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Reserve Book</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reserve.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+        }
+        h1 {
+            color: #0a7a50;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 350px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #0a7a50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            padding: 0;
+        }
+        nav a {
+            text-decoration: none;
+            color: #0a7a50;
+        }
+        nav a.active {
+            font-weight: bold;
+        }
+        p.message {
+            color: green;
+        }
+    </style>
 </head>
 <body>
 
@@ -96,42 +154,39 @@ if (isset($_POST['reserve'])) {
 <nav>
     <ul>
         <li><a href="Books.php">BOOKS</a></li>
-        <li><a href="student_transaction.php" class="active">Student Transaction</a></li>
+        <li><a href="student_transaction.php" >Student Transaction</a></li>
         <li><a href="logout.php">Logout</a></li>
     </ul>
 </nav>
 
 <?php if (isset($_SESSION['message'])): ?>
-    <p style="color:green"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
+    <p class="message"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
 <?php endif; ?>
 
 <form method="POST">
     <label>Student Name:
         <input type="text" name="student_name" required>
-    </label><br>
+    </label>
 
     <label>Student ID:
         <input type="number" name="student_id" required>
-    </label><br>
+    </label>
 
     <label>Course:
         <input type="text" name="course" required>
-    </label><br>
+    </label>
 
     <label>Year:
         <input type="number" name="year" required>
-    </label><br>
+    </label>
 
     <label>Book ID:
-        <input type="number" name="book_id"
-               value="<?= htmlspecialchars($selected_book) ?>"
-               readonly required>
-    </label><br>
+        <input type="number" name="book_id" value="<?= htmlspecialchars($selected_book) ?>" readonly required>
+    </label>
 
     <label>Reserve Date:
-        <input type="date" name="reserve_date"
-               value="<?= $reserve_date ?>" readonly>
-    </label><br><br>
+        <input type="date" name="reserve_date" value="<?= $reserve_date ?>" required>
+    </label>
 
     <button type="submit" name="reserve">Reserve</button>
 </form>

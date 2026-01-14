@@ -1,0 +1,271 @@
+/* ===========================
+   GLOBAL
+=========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background: #f4f7f6;
+}
+
+/* ===========================
+   SIDEBAR
+=========================== */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #0a7a50, #066a41);
+    color: #fff;
+    padding: 25px 20px;
+    box-shadow: 4px 0 15px rgba(0,0,0,.15);
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 14px;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 12px 16px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+    background: rgba(255,255,255,.2);
+    transform: translateX(5px);
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+.main {
+    flex: 1;
+    padding: 30px 40px;
+    max-width: 1100px;
+}
+
+/* ===========================
+   HEADINGS
+=========================== */
+.main h1 {
+    text-align: center;
+    color: #0a7a50;
+    margin-bottom: 25px;
+}
+
+.main h2 {
+    color: #066a41;
+    margin: 30px 0 15px;
+}
+
+/* ===========================
+   FORM
+=========================== */
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #0a7a50;
+}
+
+form input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    background: linear-gradient(145deg, #0a7a50, #0c8b60);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+form button:hover {
+    background: linear-gradient(145deg, #066a41, #08845a);
+    transform: translateY(-2px);
+}
+
+/* ===========================
+   SEARCH
+=========================== */
+#search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* ===========================
+   TABLE
+=========================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0,0,0,.05);
+}
+
+table th {
+    background: #0a7a50;
+    color: #fff;
+    padding: 12px;
+}
+
+table td {
+    padding: 12px;
+}
+
+table tr:nth-child(even) {
+    background: #f8faf8;
+}
+
+table tr:hover {
+    background: #e6f4ed;
+}
+
+/* ===========================
+   TABLE BUTTONS
+=========================== */
+td form button {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+td a.delete {
+    background: #ef4444;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+td a.delete:hover {
+    background: #dc2626;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .main {
+        padding: 20px;
+    }
+}
+/* ===========================
+   BUTTON SYSTEM
+=========================== */
+button,
+a.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+/* Primary (Add / Borrow / Return) */
+.btn-primary,
+form button {
+    background: linear-gradient(145deg, #0a7a50, #0c8b60);
+    color: #fff;
+}
+
+.btn-primary:hover,
+form button:hover {
+    background: linear-gradient(145deg, #066a41, #08845a);
+    transform: translateY(-1px);
+}
+
+/* Quantity buttons */
+.btn-plus {
+    background: #22c55e;
+    color: #fff;
+}
+
+.btn-minus {
+    background: #f59e0b;
+    color: #fff;
+}
+
+.btn-plus:hover { background: #16a34a; }
+.btn-minus:hover { background: #d97706; }
+
+/* Secondary (Edit) */
+.btn-secondary {
+    background: #64748b;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+/* Danger (Delete) */
+.btn-danger,
+a.delete {
+    background: #ef4444;
+    color: #fff;
+}
+
+.btn-danger:hover,
+a.delete:hover {
+    background: #dc2626;
+}
+
+/* Table spacing */
+td form,
+td a {
+    margin-right: 6px;
+    margin-bottom: 4px;
+}
+
+/* Remove old table button styles */
+td form button {
+    box-shadow: none;
+}

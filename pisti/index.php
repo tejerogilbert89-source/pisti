@@ -26,14 +26,10 @@ if (isset($_POST['delete_reserve'])) {
 
     $stmt = $conn->prepare("DELETE FROM reservations WHERE book_id = ?");
     $stmt->bind_param("i", $book_id);
-
-    if ($stmt->execute()) {
-        $_SESSION['message'] = "Reservation deleted successfully.";
-    } else {
-        $_SESSION['error'] = "Failed to delete reservation.";
-    }
-
+    $stmt->execute();
     $stmt->close();
+
+    $_SESSION['message'] = "Reservation deleted successfully.";
     header("Location: index.php");
     exit();
 }
@@ -79,21 +75,23 @@ if (isset($_POST['addItem'])) {
 
     $insert = $conn->prepare("
         INSERT INTO books
-        (Title, category, status, volume, available, borrowed, Author, Accession_Number, Masterlist, Book_Year)
-        VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, ?)
+        (Title, Author, category, Publisher, Shelf_Location, Book_Year,
+         status, volume, available, borrowed, Accession_Number)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
     ");
 
     $insert->bind_param(
-        "sssiiisis",
+        "sssssisiii",
         $_POST['itemTitle'],
+        $_POST['itemAuthor'],
         $_POST['itemCategory'],
+        $_POST['itemPublisher'],
+        $_POST['itemShelf'],
+        $_POST['Book_Year'],
         $_POST['itemStatus'],
         $qty,
         $qty,
-        $_POST['itemAuthor'],
-        $_POST['Accession_Number'],
-        $_POST['Masterlist'],
-        $_POST['Book_Year']
+        $_POST['Accession_Number']
     );
 
     $insert->execute();
@@ -159,14 +157,17 @@ $books = $conn->query($sql);
     <input name="itemTitle" placeholder="Title" required>
     <input name="itemAuthor" placeholder="Author" required>
     <input name="itemCategory" placeholder="Category" required>
+    <input name="itemPublisher" placeholder="Publisher" required>
+    <input name="itemShelf" placeholder="Shelf Location" required>
     <input name="Accession_Number" placeholder="Accession Number" required>
-    <input name="Masterlist" placeholder="Masterlist" required>
-    <input name="Book_Year" type="number" placeholder="Book Year" required>
+    <input type="number" name="Book_Year" placeholder="Year of Publication" required>
+
     <select name="itemStatus">
         <option value="Available">Available</option>
         <option value="Defective">Defective</option>
         <option value="Out of Stock">Out of Stock</option>
     </select>
+
     <input type="number" name="itemQuantity" min="1" value="1">
     <button class="btn-primary" name="addItem">Add Book</button>
 </form>
@@ -181,7 +182,9 @@ $books = $conn->query($sql);
     <th>Author</th>
     <th>Category</th>
     <th>Accession</th>
-    <th>Year</th>
+    <th>Publisher</th>
+    <th>Shelf Location</th>
+    <th>Year of Publication</th>
     <th>Status</th>
     <th>Qty</th>
     <th>Borrowed</th>
@@ -193,53 +196,43 @@ $books = $conn->query($sql);
 
 <?php while ($row = $books->fetch_assoc()): ?>
 <tr>
-<td><?= $row['book_id'] ?></td>
-<td><?= htmlspecialchars($row['Title']) ?></td>
-<td><?= htmlspecialchars($row['Author']) ?></td>
-<td><?= $row['category'] ?></td>
-<td><?= $row['Accession_Number'] ?></td>
-<td><?= $row['Book_Year'] ?></td>
-<td><?= $row['status'] ?></td>
-<td><?= $row['volume'] ?></td>
-<td><?= $row['borrowed'] ?></td>
-
-<td>
-<?= $row['reserver_name']
-    ? htmlspecialchars($row['reserver_name']) . " ({$row['reserver_id']})"
-    : "—"; ?>
-</td>
-
-<td>
-<?= $row['reserve_date']
-    ? date("M d, Y h:i A", strtotime($row['reserve_date']))
-    : "—"; ?>
-</td>
-
-<td style="text-align:center;">
-<?php if ($row['reserver_id']): ?>
-    <form method="POST" onsubmit="return confirm('Delete this reservation?')">
-        <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
-        <button name="delete_reserve" style="background:red;color:white">DELETE</button>
-
-<?php endif; ?>
-</td>
-
-<td>
-<form method="POST" style="display:inline">
-    <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
-    <input type="hidden" name="adjustment" value="1">
-    <button name="adjust_qty">+</button>
-</form>
-
-<form method="POST" style="display:inline">
-    <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
-    <input type="hidden" name="adjustment" value="-1">
-    <button name="adjust_qty">−</button>
-</form>
-
-<a href="edit.php?book_id=<?= $row['book_id'] ?>">Edit</a>
-<a href="delete.php?book_id=<?= $row['book_id'] ?>" onclick="return confirm('Delete this book?')">Delete</a>
-</td>
+    <td><?= $row['book_id'] ?></td>
+    <td><?= htmlspecialchars($row['Title']) ?></td>
+    <td><?= htmlspecialchars($row['Author']) ?></td>
+    <td><?= htmlspecialchars($row['category']) ?></td>
+    <td><?= htmlspecialchars($row['Accession_Number']) ?></td>
+    <td><?= htmlspecialchars($row['Publisher']) ?></td>
+    <td><?= htmlspecialchars($row['Shelf_Location']) ?></td>
+    <td><?= htmlspecialchars($row['Book_Year']) ?></td>
+    <td><?= htmlspecialchars($row['status']) ?></td>
+    <td><?= $row['volume'] ?></td>
+    <td><?= $row['borrowed'] ?></td>
+    <td><?= $row['reserver_name'] ? htmlspecialchars($row['reserver_name']) . " ({$row['reserver_id']})" : "—"; ?></td>
+    <td><?= $row['reserve_date'] ? date("M d, Y h:i A", strtotime($row['reserve_date'])) : "—"; ?></td>
+    <td style="text-align:center;">
+        <?php if ($row['reserver_id']): ?>
+        <form method="POST" onsubmit="return confirm('Delete this reservation?')">
+            <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
+            <button name="delete_reserve" style="background:red;color:white">DELETE</button>
+        </form>
+        <?php else: ?>
+            — 
+        <?php endif; ?>
+    </td>
+    <td>
+        <form method="POST" style="display:inline">
+            <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
+            <input type="hidden" name="adjustment" value="1">
+            <button name="adjust_qty">+</button>
+        </form>
+        <form method="POST" style="display:inline">
+            <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
+            <input type="hidden" name="adjustment" value="-1">
+            <button name="adjust_qty">−</button>
+        </form>
+        <a href="edit.php?book_id=<?= $row['book_id'] ?>">Edit</a>
+        <a href="delete.php?book_id=<?= $row['book_id'] ?>" onclick="return confirm('Delete this book?')">Delete</a>
+    </td>
 </tr>
 <?php endwhile; ?>
 </table>

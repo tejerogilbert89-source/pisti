@@ -1,13 +1,19 @@
 /* ===========================
-   GLOBAL STYLING
+   GLOBAL RESET & BASE
 =========================== */
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
-    background-color: #f4f7f6;
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+}
+
+body {
     display: flex;
     min-height: 100vh;
+    background-color: #f4f7f6;
+    color: #333;
+    transition: background 0.3s, color 0.3s;
 }
 
 /* ===========================
@@ -17,41 +23,43 @@ body {
     width: 250px;
     background: linear-gradient(180deg, #0a7a50, #066a41);
     color: #fff;
-    
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: 25px 15px;
     box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
 }
 
 .sidebar h2 {
     text-align: center;
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-weight: 700;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
-}
-
-.sidebar ul li {
-    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .sidebar ul li a {
     color: #fff;
     text-decoration: none;
     display: block;
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-weight: 500;
     transition: all 0.3s ease;
 }
 
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
     background: rgba(255, 255, 255, 0.2);
-    transform: translateX(5px);
+    transform: translateX(6px);
 }
 
 /* ===========================
@@ -59,21 +67,24 @@ body {
 =========================== */
 .main {
     flex: 1;
-    padding: 30px;
+    padding: 35px 30px;
     max-width: 1000px;
     margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* Header inside main */
+/* Headers */
 .main h1 {
     font-size: 28px;
-    margin-bottom: 20px;
     text-align: center;
+    margin-bottom: 25px;
     color: #0a7a50;
 }
 
 .main h2 {
-    font-size: 20px;
+    font-size: 22px;
     margin-top: 30px;
     margin-bottom: 15px;
     color: #066a41;
@@ -83,9 +94,10 @@ body {
    MESSAGES
 =========================== */
 .main p {
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
     margin-bottom: 15px;
+    font-size: 14px;
 }
 
 .main p[style*="color:green"] {
@@ -109,13 +121,24 @@ form label {
 }
 
 form input[type="text"],
-form input[type="number"] {
+form input[type="number"],
+form select,
+form textarea {
     width: 100%;
-    padding: 8px 12px;
-    margin-bottom: 12px;
-    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    border-radius: 10px;
     border: 1px solid #ccc;
     font-size: 14px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+    border-color: #0a7a50;
+    box-shadow: 0 0 8px rgba(10, 122, 80, 0.25);
 }
 
 form button {
@@ -123,7 +146,7 @@ form button {
     color: #fff;
     border: none;
     border-radius: 12px;
-    padding: 10px 20px;
+    padding: 10px 22px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -138,6 +161,27 @@ form button:hover {
 }
 
 /* ===========================
+   SEARCH BOX
+=========================== */
+#returnSearch,
+#searchInput {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+#returnSearch:focus,
+#searchInput:focus {
+    border-color: #0a7a50;
+    box-shadow: 0 0 8px rgba(10, 122, 80, 0.25);
+    outline: none;
+}
+
+/* ===========================
    TABLES
 =========================== */
 table {
@@ -148,10 +192,11 @@ table {
     overflow: hidden;
     box-shadow: 0 6px 15px rgba(0,0,0,0.05);
     background: #fff;
+    transition: all 0.2s ease-in-out;
 }
 
 table th, table td {
-    padding: 12px 15px;
+    padding: 14px 16px;
     text-align: left;
 }
 
@@ -167,58 +212,100 @@ table tr:nth-child(even) {
 
 table tr:hover {
     background: #e6f4ed;
+    transform: scale(1.01);
+}
+
+/* Highlight ID and Quantity columns */
+table td:nth-child(1),
+table td:nth-child(9) {
+    font-weight: 700;
+    color: #0a7a50;
+    text-align: center;
 }
 
 /* ===========================
-   TABLE BUTTONS
+   BUTTON VARIANTS
 =========================== */
+button,
+a.btn,
 td form button,
 td a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 6px 14px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     border-radius: 10px;
-    text-decoration: none;
     border: none;
     cursor: pointer;
+    text-decoration: none;
     transition: all 0.25s ease;
     margin-right: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
+button.btn-primary,
 td form button {
     background: linear-gradient(145deg, #0a7a50, #0c8b60);
     color: #fff;
 }
 
+button.btn-primary:hover,
 td form button:hover {
     background: linear-gradient(145deg, #066a41, #08845a);
     transform: translateY(-1px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+button.btn-secondary {
+    background: #64748b;
+    color: #fff;
+}
+
+button.btn-secondary:hover {
+    background: #475569;
+}
+
+button.btn-plus {
+    background: #22c55e;
+    color: #fff;
+}
+
+button.btn-plus:hover { background: #16a34a; }
+
+button.btn-minus {
+    background: #f59e0b;
+    color: #fff;
+}
+
+button.btn-minus:hover { background: #d97706; }
+
+a.btn-danger,
 td a[style*="background:red"] {
     background: #ef4444;
     color: #fff;
 }
 
+a.btn-danger:hover,
 td a[style*="background:red"]:hover {
     background: #dc2626;
     transform: translateY(-1px) scale(1.05);
 }
 
 /* ===========================
-   SEARCH BOX
+   BUTTON GROUPS
 =========================== */
-#returnSearch {
-    width: 100%;
-    padding: 8px 12px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.button-group button,
+.button-group a.btn {
+    margin: 0;
+    flex: none;
 }
 
 /* ===========================
@@ -235,6 +322,7 @@ td a[style*="background:red"]:hover {
         flex-direction: row;
         justify-content: space-around;
         border-radius: 0;
+        padding: 15px 10px;
     }
 
     .main {
@@ -253,5 +341,9 @@ td a[style*="background:red"]:hover {
         width: 100%;
         justify-content: flex-start;
         margin-bottom: 6px;
+    }
+
+    .button-group {
+        flex-direction: column;
     }
 }

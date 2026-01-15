@@ -10,7 +10,6 @@ $password   = "";
 $dbname     = "school_inventory";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -27,11 +26,22 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] != "admin") {
    BORROW BOOK
 ================================ */
 if (isset($_POST['borrow'])) {
-    $book_id = intval($_POST['book_id']);
-    $student_id = intval($_POST['student_id']);
-    $student_name = trim($_POST['student_name']);
+    $borrower_id = trim($_POST['borrower_id']);  
+    $borrower_name = trim($_POST['borrower_name']);
     $course = trim($_POST['course']);
     $year = trim($_POST['year']);
+    $book_id = intval($_POST['book_id']);
+
+    // Determine borrower type
+    if (strlen($borrower_id) == 7) {
+        $type = 'Student';
+    } elseif (strlen($borrower_id) == 5) {
+        $type = 'Teacher';
+    } else {
+        $_SESSION['error'] = "Invalid ID format. Students 7-digit, Teachers 5-digit.";
+        header("Location: borrow.php");
+        exit();
+    }
 
     // Check book availability
     $stmt = $conn->prepare("SELECT Title, volume, status FROM books WHERE book_id = ?");
@@ -52,14 +62,15 @@ if (isset($_POST['borrow'])) {
         exit();
     }
 
-    // Check if student exists
+    // Check if borrower exists
     $stmt = $conn->prepare("SELECT student_id FROM students WHERE student_id = ?");
-    $stmt->bind_param("i", $student_id);
+    $stmt->bind_param("i", $borrower_id);
     $stmt->execute();
-    $studentResult = $stmt->get_result();
-    if ($studentResult->num_rows == 0) {
-        $stmt_insert = $conn->prepare("INSERT INTO students (student_id, student_name, course, year) VALUES (?, ?, ?, ?)");
-        $stmt_insert->bind_param("isss", $student_id, $student_name, $course, $year);
+    $borrowerResult = $stmt->get_result();
+    if ($borrowerResult->num_rows == 0) {
+        // Insert new borrower
+        $stmt_insert = $conn->prepare("INSERT INTO students (student_id, student_name, course, phone_number, year, borrower_type) VALUES (?, ?, ?, '', ?, ?)");
+        $stmt_insert->bind_param("issis", $borrower_id, $borrower_name, $course, $year, $type);
         $stmt_insert->execute();
         $stmt_insert->close();
     }
@@ -67,7 +78,7 @@ if (isset($_POST['borrow'])) {
 
     // Borrow book
     $stmt = $conn->prepare("INSERT INTO transactions (book_id, student_id, date_borrowed) VALUES (?, ?, NOW())");
-    $stmt->bind_param("ii", $book_id, $student_id);
+    $stmt->bind_param("ii", $book_id, $borrower_id);
     if ($stmt->execute()) {
         $new_qty = $book['volume'] - 1;
         $new_status = $new_qty > 0 ? 'Available' : 'Out of Stock';
@@ -76,7 +87,7 @@ if (isset($_POST['borrow'])) {
         $updateStmt->execute();
         $updateStmt->close();
 
-        $_SESSION['message'] = "Book '{$book['Title']}' borrowed by {$student_name} successfully!";
+        $_SESSION['message'] = "Book '{$book['Title']}' borrowed by {$borrower_name} successfully!";
         header("Location: borrow.php");
         exit();
     } else {
@@ -157,10 +168,10 @@ if (isset($_POST['delete'])) {
 ================================ */
 $books = $conn->query("SELECT * FROM books ORDER BY Title ASC");
 $borrowed = $conn->query("
-    SELECT t.transaction_id, t.date_borrowed, b.*, s.student_name, s.course, s.year
+    SELECT t.transaction_id, t.date_borrowed, s.student_name, s.borrower_type, s.course, s.year, b.*
     FROM transactions t
-    JOIN books b ON t.book_id = b.book_id
-    JOIN students s ON t.student_id = s.student_id
+    LEFT JOIN students s ON t.student_id = s.student_id
+    LEFT JOIN books b ON t.book_id = b.book_id
     WHERE t.date_returned IS NULL
     ORDER BY t.date_borrowed ASC
 ");
@@ -197,10 +208,12 @@ $borrowed = $conn->query("
 
 <h2>Manual Borrow</h2>
 <form method="POST">
-    <label>Student Name:
-        <input type="text" name="student_name" placeholder="First Name/    Middle Name/    Last Name/" required>
+    <label>Borrower Name:
+        <input type="text" name="borrower_name" placeholder="Full Name" required>
     </label><br>
-    <label>Student ID: <input type="number" name="student_id"placeholder="Student 7num/   Teachers 5num/"  required></label><br>
+    <label>Borrower ID:
+        <input type="text" name="borrower_id" placeholder="Students 7-digit / Teachers 5-digit" required>
+    </label><br>
     <label>Course: <input type="text" name="course" required></label><br>
     <label>Year: <input type="text" name="year" required></label><br>
     <label>Book ID: <input type="number" name="book_id" required></label><br>
@@ -218,8 +231,8 @@ $borrowed = $conn->query("
     <th>Category</th>
     <th>Accession Number</th>
     <th>Book Year</th>
-    <th>Masterlist</th>
-    <th>Student</th>
+    <th>Borrower Name</th>
+    <th>Type</th>
     <th>Course / Year</th>
     <th>Borrowed Since</th>
     <th>Actions</th>
@@ -233,9 +246,9 @@ $borrowed = $conn->query("
     <td><?= htmlspecialchars($row['category']) ?></td>
     <td><?= htmlspecialchars($row['Accession_Number']) ?></td>
     <td><?= htmlspecialchars($row['Book_Year']) ?></td>
-    <td><?= htmlspecialchars($row['Masterlist']) ?></td>
-    <td><?= htmlspecialchars($row['student_name']) ?></td>
-    <td><?= htmlspecialchars($row['course']) ?> / <?= $row['year'] ?></td>
+    <td><?= htmlspecialchars($row['student_name'] ?: 'Teacher ID: '.$row['student_id']) ?></td>
+    <td><?= htmlspecialchars($row['borrower_type'] ?: 'Teacher') ?></td>
+    <td><?= htmlspecialchars($row['course'] ?? '—') ?> / <?= $row['year'] ?? '—' ?></td>
     <td><?= $row['date_borrowed'] ?></td>
     <td>
         <form method="POST" style="display:inline;" onsubmit="return confirm('Mark this book as returned?');">

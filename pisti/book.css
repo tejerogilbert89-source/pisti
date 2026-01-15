@@ -10,6 +10,8 @@
 
 body {
     background: linear-gradient(120deg, #eef5f1, #f6fbf8);
+    color: #333;
+    transition: background 0.3s, color 0.3s;
 }
 
 /* ===========================
@@ -18,6 +20,7 @@ body {
 .container {
     display: flex;
     min-height: 100vh;
+    gap: 0;
 }
 
 /* ===========================
@@ -27,23 +30,28 @@ body {
     width: 250px;
     background: linear-gradient(180deg, #0b7d4f, #044b2f);
     color: #fff;
-    padding: 25px 20px;
+    padding: 30px 20px;
     box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: all 0.3s ease;
 }
 
 .sidebar h2 {
     text-align: center;
-    margin-bottom: 35px;
     font-size: 22px;
     letter-spacing: 1px;
+    margin-bottom: 35px;
+    font-weight: 700;
 }
 
 .sidebar ul {
     list-style: none;
-}
-
-.sidebar ul li {
-    margin-bottom: 15px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .sidebar ul li a {
@@ -52,6 +60,7 @@ body {
     color: #eaf7f1;
     text-decoration: none;
     border-radius: 10px;
+    font-weight: 500;
     transition: all 0.3s ease;
 }
 
@@ -59,7 +68,8 @@ body {
 .sidebar ul li a:hover {
     background: rgba(255,255,255,0.25);
     color: #ffffff;
-    transform: translateX(4px);
+    transform: translateX(6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* ===========================
@@ -67,7 +77,10 @@ body {
 =========================== */
 .main {
     flex: 1;
-    padding: 30px 40px;
+    padding: 35px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 /* ===========================
@@ -85,12 +98,13 @@ body {
    SEARCH BAR
 =========================== */
 .search-box {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .search-box input {
-    padding: 8px 14px;
-    border-radius: 8px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
     border: 1px solid #b6d6c6;
     outline: none;
     transition: all 0.3s ease;
@@ -98,7 +112,7 @@ body {
 
 .search-box input:focus {
     border-color: #0b7d4f;
-    box-shadow: 0 0 0 3px rgba(11,125,79,0.15);
+    box-shadow: 0 0 0 4px rgba(11,125,79,0.15);
 }
 
 /* ===========================
@@ -111,6 +125,11 @@ body {
     overflow: hidden;
     max-width: 1100px;
     margin: auto;
+    transition: transform 0.3s ease;
+}
+
+.table-card:hover {
+    transform: translateY(-2px);
 }
 
 /* ===========================
@@ -120,6 +139,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
+    transition: all 0.25s ease;
 }
 
 /* ===========================
@@ -142,7 +162,8 @@ thead th {
    TABLE BODY
 =========================== */
 tbody tr {
-    transition: background 0.25s ease;
+    transition: all 0.25s ease;
+    cursor: pointer;
 }
 
 tbody tr:nth-child(even) {
@@ -151,29 +172,27 @@ tbody tr:nth-child(even) {
 
 tbody tr:hover {
     background: #e0f4eb;
+    transform: scale(1.01);
 }
 
 tbody td {
     padding: 13px 12px;
     color: #333;
+    vertical-align: middle;
 }
 
 /* ===========================
    HIGHLIGHT COLUMNS
 =========================== */
-tbody td:nth-child(1) {
-    font-weight: 700;
-    color: #0b7d4f;
-}
-
+tbody td:nth-child(1),
 tbody td:nth-child(9) {
-    text-align: center;
     font-weight: 700;
     color: #0b7d4f;
+    text-align: center;
 }
 
 /* ===========================
-   STATUS COLORS (OPTIONAL)
+   STATUS COLORS
 =========================== */
 .status-returned {
     color: #0b7d4f;
@@ -191,7 +210,62 @@ tbody td:nth-child(9) {
 }
 
 /* ===========================
-   RESPONSIVE
+   TABLE BUTTONS
+=========================== */
+td form button,
+td a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    margin-right: 6px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+td form button {
+    background: linear-gradient(145deg, #0b7d4f, #129f67);
+    color: #fff;
+}
+
+td form button:hover {
+    background: linear-gradient(145deg, #066a41, #0f8a5c);
+    transform: translateY(-1px) scale(1.05);
+}
+
+td a.btn-danger {
+    background: #ef4444;
+    color: #fff;
+}
+
+td a.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px) scale(1.05);
+}
+
+/* ===========================
+   BUTTON GROUPS
+=========================== */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.button-group button,
+.button-group a.btn {
+    margin: 0;
+    flex: none;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
 =========================== */
 @media (max-width: 900px) {
     .sidebar {
@@ -204,5 +278,16 @@ tbody td:nth-child(9) {
 
     table {
         font-size: 13px;
+    }
+
+    td form button,
+    td a {
+        width: 100%;
+        justify-content: flex-start;
+        margin-bottom: 6px;
+    }
+
+    .button-group {
+        flex-direction: column;
     }
 }

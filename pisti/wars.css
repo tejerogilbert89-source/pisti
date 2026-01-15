@@ -1,5 +1,5 @@
 /* ===========================
-   GLOBAL
+   GLOBAL RESET & BASE
 =========================== */
 * {
     margin: 0;
@@ -12,6 +12,8 @@ body {
     display: flex;
     min-height: 100vh;
     background: #f4f7f6;
+    color: #333;
+    transition: background 0.3s, color 0.3s;
 }
 
 /* ===========================
@@ -21,22 +23,27 @@ body {
     width: 250px;
     background: linear-gradient(180deg, #0a7a50, #066a41);
     color: #fff;
-    padding: 25px 20px;
+    padding: 30px 20px;
     box-shadow: 4px 0 15px rgba(0,0,0,.15);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.3s ease;
 }
 
 .sidebar h2 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    font-size: 1.8rem;
     letter-spacing: 1px;
+    font-weight: 700;
 }
 
 .sidebar ul {
     list-style: none;
-}
-
-.sidebar ul li {
-    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .sidebar ul li a {
@@ -44,14 +51,15 @@ body {
     padding: 12px 16px;
     color: #fff;
     text-decoration: none;
-    border-radius: 8px;
-    transition: 0.3s;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
-    background: rgba(255,255,255,.2);
-    transform: translateX(5px);
+    background: rgba(255,255,255,0.2);
+    transform: translateX(6px);
 }
 
 /* ===========================
@@ -59,8 +67,12 @@ body {
 =========================== */
 .main {
     flex: 1;
-    padding: 30px 40px;
+    padding: 40px;
     max-width: 1100px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 /* ===========================
@@ -69,16 +81,18 @@ body {
 .main h1 {
     text-align: center;
     color: #0a7a50;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
 }
 
 .main h2 {
     color: #066a41;
-    margin: 30px 0 15px;
+    margin: 25px 0 15px;
+    font-size: 1.5rem;
 }
 
 /* ===========================
-   FORM
+   FORM ELEMENTS
 =========================== */
 form label {
     display: block;
@@ -87,12 +101,24 @@ form label {
     color: #0a7a50;
 }
 
-form input {
+form input,
+form select,
+form textarea {
     width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 15px;
-    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border-radius: 10px;
     border: 1px solid #ccc;
+    font-size: 0.95rem;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+    border-color: #0a7a50;
+    box-shadow: 0 0 8px rgba(10, 122, 80, 0.3);
 }
 
 form button {
@@ -103,12 +129,13 @@ form button {
     padding: 10px 22px;
     font-weight: 600;
     cursor: pointer;
-    transition: .3s;
+    transition: all 0.3s ease;
 }
 
 form button:hover {
     background: linear-gradient(145deg, #066a41, #08845a);
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,.2);
 }
 
 /* ===========================
@@ -116,10 +143,17 @@ form button:hover {
 =========================== */
 #search {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 10px;
     border: 1px solid #ccc;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+#search:focus {
+    border-color: #0a7a50;
+    box-shadow: 0 0 8px rgba(10, 122, 80, 0.25);
+    outline: none;
 }
 
 /* ===========================
@@ -131,17 +165,20 @@ table {
     background: #fff;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 6px 15px rgba(0,0,0,.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    transition: transform 0.3s;
 }
 
 table th {
     background: #0a7a50;
     color: #fff;
-    padding: 12px;
+    padding: 14px;
+    text-align: left;
 }
 
 table td {
-    padding: 12px;
+    padding: 12px 14px;
+    vertical-align: middle;
 }
 
 table tr:nth-child(even) {
@@ -150,47 +187,12 @@ table tr:nth-child(even) {
 
 table tr:hover {
     background: #e6f4ed;
+    transform: scale(1.01);
+    transition: all 0.2s ease-in-out;
 }
 
 /* ===========================
-   TABLE BUTTONS
-=========================== */
-td form button {
-    padding: 6px 14px;
-    font-size: 12px;
-    border-radius: 10px;
-}
-
-td a.delete {
-    background: #ef4444;
-    color: #fff;
-    padding: 6px 14px;
-    border-radius: 10px;
-    text-decoration: none;
-}
-
-td a.delete:hover {
-    background: #dc2626;
-}
-
-/* ===========================
-   RESPONSIVE
-=========================== */
-@media (max-width: 900px) {
-    body {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-    }
-
-    .main {
-        padding: 20px;
-    }
-}
-/* ===========================
-   BUTTON SYSTEM
+   BUTTON VARIANTS
 =========================== */
 button,
 a.btn {
@@ -206,23 +208,28 @@ a.btn {
     cursor: pointer;
     text-decoration: none;
     transition: all 0.25s ease;
-    white-space: nowrap;
 }
 
-/* Primary (Add / Borrow / Return) */
-.btn-primary,
-form button {
+.btn-primary {
     background: linear-gradient(145deg, #0a7a50, #0c8b60);
     color: #fff;
 }
 
-.btn-primary:hover,
-form button:hover {
+.btn-primary:hover {
     background: linear-gradient(145deg, #066a41, #08845a);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,.15);
 }
 
-/* Quantity buttons */
+.btn-secondary {
+    background: #64748b;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
 .btn-plus {
     background: #22c55e;
     color: #fff;
@@ -236,17 +243,6 @@ form button:hover {
 .btn-plus:hover { background: #16a34a; }
 .btn-minus:hover { background: #d97706; }
 
-/* Secondary (Edit) */
-.btn-secondary {
-    background: #64748b;
-    color: #fff;
-}
-
-.btn-secondary:hover {
-    background: #475569;
-}
-
-/* Danger (Delete) */
 .btn-danger,
 a.delete {
     background: #ef4444;
@@ -258,14 +254,51 @@ a.delete:hover {
     background: #dc2626;
 }
 
-/* Table spacing */
-td form,
-td a {
-    margin-right: 6px;
-    margin-bottom: 4px;
+/* ===========================
+   BUTTON GROUPS (ARRANGED NEATLY)
+=========================== */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-/* Remove old table button styles */
-td form button {
-    box-shadow: none;
+.button-group button,
+.button-group a.btn {
+    margin: 0;
+    flex: none;
+}
+
+/* ===========================
+   TABLE BUTTONS
+=========================== */
+td .button-group {
+    justify-content: flex-start;
+}
+
+td form button,
+td a {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .main {
+        padding: 20px;
+    }
 }

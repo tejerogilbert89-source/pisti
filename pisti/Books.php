@@ -74,10 +74,11 @@ $books = $conn->query($sql);
     <th>ID</th>
     <th>Title</th>
     <th>Author</th>
-
+    <th>Publisher</th>
     <th>Category</th>
     <th>Status</th>
     <th>Qty</th>
+    <th>Shelf Location</th>
     <th>Borrowed By</th>
     <th>Reserved By</th>
     <th>Reserve Date</th>
@@ -89,9 +90,11 @@ $books = $conn->query($sql);
     <td><?= $row['book_id'] ?></td>
     <td><?= htmlspecialchars($row['Title']) ?></td>
     <td><?= htmlspecialchars($row['Author']) ?></td>
+    <td><?= htmlspecialchars($row['Publisher']) ?></td>
     <td><?= htmlspecialchars($row['category']) ?></td>
     <td><?= htmlspecialchars($row['status']) ?></td>
     <td><?= $row['volume'] ?></td>
+    <td><?= htmlspecialchars($row['Shelf_Location']) ?></td>
 
     <!-- Borrower -->
     <td>
@@ -107,11 +110,17 @@ $books = $conn->query($sql);
             : "—"; ?>
     </td>
 
-    <!-- Reserve Date -->
+    <!-- Reserve Date (editable) -->
     <td>
-        <?= $row['reserve_date']
-            ? date("M d, Y", strtotime($row['reserve_date']))
-            : "—"; ?>
+        <?php if ($row['reserve_date']): ?>
+            <form method="POST" action="">
+                <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
+                <input type="date" name="reserve_date" value="<?= date('Y-m-d', strtotime($row['reserve_date'])) ?>">
+                <button type="submit" name="update_date">Update</button>
+            </form>
+        <?php else: ?>
+            —
+        <?php endif; ?>
     </td>
 
     <!-- Reserve Button -->
@@ -136,7 +145,7 @@ $books = $conn->query($sql);
 function searchTable() {
     let input = document.getElementById("search").value.toLowerCase();
     document.querySelectorAll("#bookTable tr").forEach((row, i) => {
-        if (i === 0) return;
+        if (i === 0) return; // skip header
         row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
     });
 }
@@ -144,3 +153,24 @@ function searchTable() {
 
 </body>
 </html>
+
+<?php
+/* ===============================
+   HANDLE RESERVE DATE UPDATE
+================================ */
+if (isset($_POST['update_date'], $_POST['book_id'], $_POST['reserve_date'])) {
+    $book_id = (int)$_POST['book_id'];
+    $reserve_date = $_POST['reserve_date'];
+
+    $stmt = $conn->prepare("UPDATE reservations SET reserve_date = ? WHERE book_id = ?");
+    $stmt->bind_param("si", $reserve_date, $book_id);
+
+    if ($stmt->execute()) {
+        // Reload page to reflect the updated date
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    } else {
+        echo "<p style='color:red;'>Error updating date: " . $conn->error . "</p>";
+    }
+}
+?>

@@ -58,13 +58,13 @@ $transactions = $conn->query($sql);
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Date Borrowed</th>
-                <th>Date Returned</th>
+                <th>Book</th>
                 <th>Student</th>
                 <th>Student ID</th>
                 <th>Course</th>
                 <th>Year</th>
-                <th>Book</th>
+                <th>Date Borrowed</th>
+                <th>Date Returned</th>
                 <th>Quantity</th>
             </tr>
         </thead>
@@ -72,13 +72,13 @@ $transactions = $conn->query($sql);
             <?php while($row = $transactions->fetch_assoc()): ?>
                 <tr>
                     <td><?= htmlspecialchars($row['transaction_id']) ?></td>
-                    <td><?= htmlspecialchars($row['date_borrowed']) ?></td>
-                    <td><?= htmlspecialchars($row['date_returned'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($row['Title']) ?></td>
                     <td><?= htmlspecialchars($row['student_name']) ?></td>
                     <td><?= htmlspecialchars($row['student_id']) ?></td>
                     <td><?= htmlspecialchars($row['course']) ?></td>
                     <td><?= htmlspecialchars($row['year']) ?></td>
-                    <td><?= htmlspecialchars($row['Title']) ?></td>
+                    <td><?= htmlspecialchars($row['date_borrowed']) ?></td>
+                    <td><?= htmlspecialchars($row['date_returned'] ?? '-') ?></td>
                     <td><?= htmlspecialchars($row['quantity']) ?></td>
                 </tr>
             <?php endwhile; ?>

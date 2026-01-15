@@ -13,6 +13,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+$conn->set_charset("utf8mb4");
 
 /* ===============================
    LOGIN CHECK
@@ -51,14 +52,15 @@ if (!$book) {
 ================================ */
 if (isset($_POST['updateItem'])) {
 
-    $title       = trim($_POST['itemName']);
-    $category    = trim($_POST['itemCategory']);
-    $author      = trim($_POST['itemAuthor']);
-    $status      = trim($_POST['itemStatus']);
-    $volume      = (int)$_POST['itemQuantity'];
-    $accession   = trim($_POST['itemAccession']);
-    $book_year   = (int)$_POST['itemYear'];
-    $masterlist  = trim($_POST['itemMasterlist']);
+    $title      = trim($_POST['itemName']);
+    $category   = trim($_POST['itemCategory']);
+    $author     = trim($_POST['itemAuthor']);
+    $publisher  = trim($_POST['itemPublisher']);
+    $shelf      = trim($_POST['itemShelf']);
+    $status     = trim($_POST['itemStatus']);
+    $volume     = (int)$_POST['itemQuantity'];
+    $accession  = trim($_POST['itemAccession']);
+    $book_year  = (int)$_POST['itemYear'];
 
     if ($volume < 0) {
         $volume = 0;
@@ -73,24 +75,26 @@ if (isset($_POST['updateItem'])) {
         SET Title = ?,
             category = ?,
             Author = ?,
+            Publisher = ?,
+            Shelf_Location = ?,
             status = ?,
             volume = ?,
             Accession_Number = ?,
-            Book_Year = ?,
-            Masterlist = ?
+            Book_Year = ?
         WHERE book_id = ?
     ");
 
     $update->bind_param(
-        "ssssiiisi",
+        "ssssssiiis",
         $title,
         $category,
         $author,
+        $publisher,
+        $shelf,
         $status,
         $volume,
         $accession,
         $book_year,
-        $masterlist,
         $book_id
     );
 
@@ -140,6 +144,14 @@ if (isset($_POST['updateItem'])) {
             <input type="text" name="itemAuthor"
                    value="<?= htmlspecialchars($book['Author']) ?>" required>
 
+            <label>Publisher</label>
+            <input type="text" name="itemPublisher"
+                   value="<?= htmlspecialchars($book['Publisher']) ?>" required>
+
+            <label>Shelf Location</label>
+            <input type="text" name="itemShelf"
+                   value="<?= htmlspecialchars($book['Shelf_Location']) ?>" required>
+
             <label>Status</label>
             <select name="itemStatus">
                 <option value="Available" <?= $book['status']=="Available" ? "selected" : "" ?>>Available</option>
@@ -156,13 +168,9 @@ if (isset($_POST['updateItem'])) {
             <input type="text" name="itemAccession"
                    value="<?= htmlspecialchars($book['Accession_Number']) ?>">
 
-            <label>Book Year</label>
+            <label>Year of Publication</label>
             <input type="number" name="itemYear"
                    value="<?= (int)$book['Book_Year'] ?>">
-
-            <label>Masterlist</label>
-            <input type="text" name="itemMasterlist"
-                   value="<?= htmlspecialchars($book['Masterlist']) ?>">
 
             <button type="submit" name="updateItem">Save Changes</button>
             <a href="index.php">Cancel</a>

@@ -2,38 +2,74 @@
 session_start();
 include "db.php";
 
-if (!isset($_SESSION['username'])) {
+/* ===============================
+   LOGIN CHECK (STUDENT)
+================================ */
+if (!isset($_SESSION['username'], $_SESSION['student_id'])) {
     header("Location: login.php");
     exit();
 }
 
+$student_id = (int)$_SESSION['student_id'];
+
 /* ===============================
-   FETCH BOOKS + BORROWER + RESERVER
+   HANDLE RESERVATION DATE UPDATE
+================================ */
+if (isset($_POST['update_date'])) {
+
+    $book_id      = (int)$_POST['book_id'];
+    $reserve_date = $_POST['reserve_date'];
+
+    // Update ONLY the logged-in student's reservation
+    $stmt = $conn->prepare("
+        UPDATE reservations
+        SET reserve_date = ?
+        WHERE book_id = ?
+          AND student_id = ?
+    ");
+    $stmt->bind_param("sii", $reserve_date, $book_id, $student_id);
+    $stmt->execute();
+    $stmt->close();
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+/* ===============================
+   FETCH BOOKS + BORROW + RESERVE
 ================================ */
 $sql = "
 SELECT 
-    b.*,
+    b.book_id,
+    b.Title,
+    b.Author,
+    b.Publisher,
+    b.category,
+    b.status,
+    b.volume,
+    b.available,
+    b.Call_Number,
+    b.Shelf_Location,
 
     -- Borrow info
-    sb.student_name AS borrower_name,
-    sb.student_id   AS borrower_id,
+    s1.student_name AS borrower_name,
+    s1.student_id   AS borrower_id,
     t.date_borrowed,
 
-    -- Reserve info
+    -- Reservation info
     r.student_name  AS reserver_name,
     r.student_id    AS reserver_id,
     r.reserve_date
 
 FROM books b
 
--- Borrow joins (only active borrow)
 LEFT JOIN transactions t 
-    ON b.book_id = t.book_id 
+    ON b.book_id = t.book_id
    AND t.date_returned IS NULL
-LEFT JOIN students sb 
-    ON t.student_id = sb.student_id
 
--- Reservation join (latest reservation only)
+LEFT JOIN students s1 
+    ON t.student_id = s1.student_id
+
 LEFT JOIN reservations r 
     ON b.book_id = r.book_id
 
@@ -65,20 +101,22 @@ $books = $conn->query($sql);
 
 <main class="main">
 
-<h1>Books</h1>
+<h1>Library Books</h1>
 
 <input type="text" id="search" placeholder="Search books..." onkeyup="searchTable()">
 
-<table id="bookTable" border="1" cellpadding="5" cellspacing="0">
+<table id="bookTable" cellpadding="6">
 <tr>
     <th>ID</th>
+    <th>Call No.</th>
     <th>Title</th>
     <th>Author</th>
     <th>Publisher</th>
     <th>Category</th>
     <th>Status</th>
-    <th>Qty</th>
-    <th>Shelf Location</th>
+    <th>Total Copies</th>
+    <th>Available</th>
+    <th>Shelf</th>
     <th>Borrowed By</th>
     <th>Reserved By</th>
     <th>Reserve Date</th>
@@ -87,53 +125,60 @@ $books = $conn->query($sql);
 
 <?php while ($row = $books->fetch_assoc()): ?>
 <tr>
-    <td><?= $row['book_id'] ?></td>
-    <td><?= htmlspecialchars($row['Title']) ?></td>
-    <td><?= htmlspecialchars($row['Author']) ?></td>
-    <td><?= htmlspecialchars($row['Publisher']) ?></td>
-    <td><?= htmlspecialchars($row['category']) ?></td>
-    <td><?= htmlspecialchars($row['status']) ?></td>
-    <td><?= $row['volume'] ?></td>
-    <td><?= htmlspecialchars($row['Shelf_Location']) ?></td>
 
-    <!-- Borrower -->
-    <td>
-        <?= $row['borrower_name']
-            ? htmlspecialchars($row['borrower_name']) . " ({$row['borrower_id']})"
-            : "—"; ?>
-    </td>
+<td><?= $row['book_id'] ?></td>
+<td><?= htmlspecialchars($row['Call_Number']) ?></td>
+<td><?= htmlspecialchars($row['Title']) ?></td>
+<td><?= htmlspecialchars($row['Author']) ?></td>
+<td><?= htmlspecialchars($row['Publisher']) ?></td>
+<td><?= htmlspecialchars($row['category']) ?></td>
+<td><?= htmlspecialchars($row['status']) ?></td>
+<td><?= (int)$row['volume'] ?></td>
+<td><?= (int)$row['available'] ?></td>
+<td><?= htmlspecialchars($row['Shelf_Location']) ?></td>
 
-    <!-- Reserver -->
-    <td>
-        <?= $row['reserver_name']
-            ? htmlspecialchars($row['reserver_name']) . " ({$row['reserver_id']})"
-            : "—"; ?>
-    </td>
+<!-- Borrower -->
+<td>
+<?= $row['borrower_name']
+    ? htmlspecialchars($row['borrower_name']) . " ({$row['borrower_id']})"
+    : "—"; ?>
+</td>
 
-    <!-- Reserve Date (editable) -->
-    <td>
-        <?php if ($row['reserve_date']): ?>
-            <form method="POST" action="">
-                <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
-                <input type="date" name="reserve_date" value="<?= date('Y-m-d', strtotime($row['reserve_date'])) ?>">
-                <button type="submit" name="update_date">Update</button>
-            </form>
-        <?php else: ?>
-            —
-        <?php endif; ?>
-    </td>
+<!-- Reserver -->
+<td>
+<?= $row['reserver_name']
+    ? htmlspecialchars($row['reserver_name']) . " ({$row['reserver_id']})"
+    : "—"; ?>
+</td>
 
-    <!-- Reserve Button -->
-    <td style="text-align:center;">
-        <?php if ($row['status'] === 'Available' && !$row['reserver_id']): ?>
-            <form method="GET" action="reserve.php">
-                <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
-                <button type="submit">RESERVE</button>
-            </form>
-        <?php else: ?>
-            —
-        <?php endif; ?>
-    </td>
+<!-- Reserve Date -->
+<td>
+<?php if ($row['reserver_id'] == $student_id): ?>
+    <form method="POST">
+        <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
+        <input type="date" name="reserve_date"
+               value="<?= date('Y-m-d', strtotime($row['reserve_date'])) ?>" required>
+    </form>
+<?php elseif ($row['reserve_date']): ?>
+    <?= date("M d, Y", strtotime($row['reserve_date'])) ?>
+<?php else: ?>
+    —
+<?php endif; ?>
+</td>
+
+<!-- Reserve Button -->
+<td style="text-align:center;">
+<?php if ($row['available'] > 0 && !$row['reserver_id']): ?>
+    <form method="GET" action="reserve.php">
+        <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
+        <button type="submit">RESERVE</button>
+        
+    </form>
+<?php else: ?>
+    —
+<?php endif; ?>
+</td>
+
 </tr>
 <?php endwhile; ?>
 </table>
@@ -145,7 +190,7 @@ $books = $conn->query($sql);
 function searchTable() {
     let input = document.getElementById("search").value.toLowerCase();
     document.querySelectorAll("#bookTable tr").forEach((row, i) => {
-        if (i === 0) return; // skip header
+        if (i === 0) return;
         row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
     });
 }
@@ -153,24 +198,3 @@ function searchTable() {
 
 </body>
 </html>
-
-<?php
-/* ===============================
-   HANDLE RESERVE DATE UPDATE
-================================ */
-if (isset($_POST['update_date'], $_POST['book_id'], $_POST['reserve_date'])) {
-    $book_id = (int)$_POST['book_id'];
-    $reserve_date = $_POST['reserve_date'];
-
-    $stmt = $conn->prepare("UPDATE reservations SET reserve_date = ? WHERE book_id = ?");
-    $stmt->bind_param("si", $reserve_date, $book_id);
-
-    if ($stmt->execute()) {
-        // Reload page to reflect the updated date
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit();
-    } else {
-        echo "<p style='color:red;'>Error updating date: " . $conn->error . "</p>";
-    }
-}
-?>

@@ -154,12 +154,14 @@ $books = $conn->query($sql);
 
 <h2>Add New Book</h2>
 <form method="POST">
+    <input name="Callnumber" placeholder="Call_Number" required>
     <input name="itemTitle" placeholder="Title" required>
     <input name="itemAuthor" placeholder="Author" required>
     <input name="itemCategory" placeholder="Category" required>
-    <input name="itemPublisher" placeholder="Publisher" required>
-    <input name="itemShelf" placeholder="Shelf Location" required>
     <input name="Accession_Number" placeholder="Accession Number" required>
+    <input name="itemPublisher" placeholder="Publisher" required>
+    <input name="itemCopies" placeholder="Copies" required>
+    <input name="itemShelf" placeholder="Shelf Location" required>
     <input type="number" name="Book_Year" placeholder="Year of Publication" required>
 
     <select name="itemStatus">
@@ -178,11 +180,13 @@ $books = $conn->query($sql);
 <table id="bookTable">
 <tr>
     <th>ID</th>
+    <th>Call Number</th>
     <th>Title</th>
     <th>Author</th>
     <th>Category</th>
     <th>Accession</th>
     <th>Publisher</th>
+    <th>Copies</th>
     <th>Shelf Location</th>
     <th>Year of Publication</th>
     <th>Status</th>
@@ -197,11 +201,13 @@ $books = $conn->query($sql);
 <?php while ($row = $books->fetch_assoc()): ?>
 <tr>
     <td><?= $row['book_id'] ?></td>
+    <td><?= htmlspecialchars($row['Call_Number']) ?></td>
     <td><?= htmlspecialchars($row['Title']) ?></td>
     <td><?= htmlspecialchars($row['Author']) ?></td>
     <td><?= htmlspecialchars($row['category']) ?></td>
     <td><?= htmlspecialchars($row['Accession_Number']) ?></td>
     <td><?= htmlspecialchars($row['Publisher']) ?></td>
+    <td><?= htmlspecialchars($row['Copies']) ?></td>
     <td><?= htmlspecialchars($row['Shelf_Location']) ?></td>
     <td><?= htmlspecialchars($row['Book_Year']) ?></td>
     <td><?= htmlspecialchars($row['status']) ?></td>

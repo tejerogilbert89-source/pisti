@@ -84,7 +84,7 @@ $books = $conn->query($sql);
 <head>
 <meta charset="UTF-8">
 <title>Books</title>
-<link rel="stylesheet" href="book.css">
+<link rel="stylesheet" href="wars.css">
 </head>
 <body>
 

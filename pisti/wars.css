@@ -13,66 +13,57 @@ body {
     min-height: 100vh;
     background: #f4f7f6;
     color: #333;
-    transition: background 0.3s, color 0.3s;
 }
 
 /* ===========================
    SIDEBAR
 =========================== */
 .sidebar {
-    width: 250px;
+    width: 240px;
     background: linear-gradient(180deg, #0a7a50, #066a41);
     color: #fff;
-    padding: 30px 20px;
-    box-shadow: 4px 0 15px rgba(0,0,0,.15);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: all 0.3s ease;
+    padding: 25px 20px;
+    box-shadow: 4px 0 12px rgba(0,0,0,.15);
+    position: fixed;
+    height: 100vh;
 }
 
 .sidebar h2 {
     text-align: center;
-    margin-bottom: 40px;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
+    font-size: 1.7rem;
     font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 35px;
 }
 
 .sidebar ul {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
 }
 
 .sidebar ul li a {
     display: block;
-    padding: 12px 16px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
     color: #fff;
     text-decoration: none;
-    border-radius: 10px;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.25s;
 }
 
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
     background: rgba(255,255,255,0.2);
-    transform: translateX(6px);
+    padding-left: 22px;
 }
 
 /* ===========================
    MAIN CONTENT
 =========================== */
 .main {
+    margin-left: 240px;
     flex: 1;
-    padding: 40px;
-    max-width: 1100px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    padding: 35px 40px;
 }
 
 /* ===========================
@@ -81,104 +72,111 @@ body {
 .main h1 {
     text-align: center;
     color: #0a7a50;
-    margin-bottom: 30px;
-    font-size: 2.2rem;
+    font-size: 2rem;
+    margin-bottom: 25px;
 }
 
 .main h2 {
     color: #066a41;
-    margin: 25px 0 15px;
-    font-size: 1.5rem;
+    margin: 25px 0 12px;
 }
 
 /* ===========================
-   FORM ELEMENTS
+   ADD BOOK FORM GRID
 =========================== */
-form label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #0a7a50;
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
 }
 
-form input,
-form select,
-form textarea {
+.form-grid input,
+.form-grid select {
     width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 16px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    font-size: 0.95rem;
-    transition: border 0.3s, box-shadow 0.3s;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 13px;
+    transition: 0.25s;
+    background: #f9fafb;
 }
 
-form input:focus,
-form select:focus,
-form textarea:focus {
+.form-grid input:focus,
+.form-grid select:focus {
     outline: none;
     border-color: #0a7a50;
-    box-shadow: 0 0 8px rgba(10, 122, 80, 0.3);
+    box-shadow: 0 0 0 3px rgba(10,122,80,0.18);
+    background: #fff;
 }
 
-form button {
+.form-grid button {
+    grid-column: span 4;
+    justify-self: center;
+    padding: 10px 30px;
     background: linear-gradient(145deg, #0a7a50, #0c8b60);
     color: #fff;
     border: none;
-    border-radius: 12px;
-    padding: 10px 22px;
+    border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    font-size: 14px;
+    transition: 0.25s;
 }
 
-form button:hover {
+.form-grid button:hover {
     background: linear-gradient(145deg, #066a41, #08845a);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,.2);
+    transform: translateY(-1px);
 }
 
 /* ===========================
-   SEARCH
+   SEARCH BAR
 =========================== */
 #search {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 18px;
-    border-radius: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
     border: 1px solid #ccc;
-    transition: border 0.3s, box-shadow 0.3s;
-}
-
-#search:focus {
-    border-color: #0a7a50;
-    box-shadow: 0 0 8px rgba(10, 122, 80, 0.25);
-    outline: none;
+    font-size: 13px;
+    margin-bottom: 15px;
 }
 
 /* ===========================
-   TABLE
+   TABLE CONTAINER
+=========================== */
+.table-container {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.05);
+}
+
+/* ===========================
+   TABLE STYLING
 =========================== */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(0,0,0,.08);
-    transition: transform 0.3s;
+    min-width: 1000px;
+}
+
+table th,
+table td {
+    padding: 6px 10px;
+    font-size: 13px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
 }
 
 table th {
     background: #0a7a50;
     color: #fff;
-    padding: 14px;
+    font-weight: 600;
     text-align: left;
-}
-
-table td {
-    padding: 12px 14px;
-    vertical-align: middle;
 }
 
 table tr:nth-child(even) {
@@ -187,61 +185,33 @@ table tr:nth-child(even) {
 
 table tr:hover {
     background: #e6f4ed;
-    transform: scale(1.01);
-    transition: all 0.2s ease-in-out;
 }
 
 /* ===========================
-   BUTTON VARIANTS
+   BUTTONS
 =========================== */
 button,
-a.btn {
+a {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 34px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.25s ease;
+    gap: 3px;
 }
 
 .btn-primary {
-    background: linear-gradient(145deg, #0a7a50, #0c8b60);
+    background: #0a7a50;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(145deg, #066a41, #08845a);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,.15);
+    background: #066a41;
 }
-
-.btn-secondary {
-    background: #64748b;
-    color: #fff;
-}
-
-.btn-secondary:hover {
-    background: #475569;
-}
-
-.btn-plus {
-    background: #22c55e;
-    color: #fff;
-}
-
-.btn-minus {
-    background: #f59e0b;
-    color: #fff;
-}
-
-.btn-plus:hover { background: #16a34a; }
-.btn-minus:hover { background: #d97706; }
 
 .btn-danger,
 a.delete {
@@ -255,34 +225,11 @@ a.delete:hover {
 }
 
 /* ===========================
-   BUTTON GROUPS (ARRANGED NEATLY)
+   BUTTON GROUP
 =========================== */
 .button-group {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.button-group button,
-.button-group a.btn {
-    margin: 0;
-    flex: none;
-}
-
-/* ===========================
-   TABLE BUTTONS
-=========================== */
-td .button-group {
-    justify-content: flex-start;
-}
-
-td form button,
-td a {
-    padding: 6px 14px;
-    font-size: 12px;
-    border-radius: 10px;
-    text-decoration: none;
-    cursor: pointer;
+    gap: 5px;
 }
 
 /* ===========================
@@ -295,10 +242,20 @@ td a {
 
     .sidebar {
         width: 100%;
-        padding: 20px;
+        height: auto;
+        position: relative;
     }
 
     .main {
+        margin-left: 0;
         padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-grid button {
+        grid-column: span 2;
     }
 }

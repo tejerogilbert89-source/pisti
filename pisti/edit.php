@@ -121,7 +121,7 @@ if (isset($_POST['updateItem'])) {
 <head>
 <meta charset="UTF-8">
 <title>Edit Book</title>
-<link rel="stylesheet" href="reserve.css">
+<link rel="stylesheet" href="edit.css">
 </head>
 <body>
 

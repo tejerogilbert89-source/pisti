@@ -103,6 +103,7 @@ if (isset($_POST['reserve'])) {
 <head>
     <meta charset="UTF-8">
     <title>Reserve Book</title>
+    <link rel="stylesheet" href="reserve.css">
 </head>
 <body>
 

@@ -1,5 +1,5 @@
 /* ===========================
-   GLOBAL RESET
+   GLOBAL RESET & BASE
 =========================== */
 * {
     margin: 0;
@@ -12,7 +12,7 @@ body {
     background: #f4f7f6;
     color: #2e3d34;
     min-height: 100vh;
-    padding: 30px;
+    padding: 40px 20px;
 }
 
 /* ===========================
@@ -20,20 +20,22 @@ body {
 =========================== */
 h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: #0a7a50;
-    font-size: 32px;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 /* ===========================
-   NAVIGATION
+   NAVIGATION BAR
 =========================== */
 nav {
     background: linear-gradient(180deg, #0a7a50, #066a41);
-    padding: 15px;
+    padding: 14px 20px;
     border-radius: 10px;
-    margin-bottom: 25px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    margin: 0 auto 30px auto;
+    max-width: 700px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 nav ul {
@@ -44,21 +46,23 @@ nav ul {
 }
 
 nav ul li a {
-    color: #ffffff;
+    color: #fff;
     text-decoration: none;
+    font-size: 14px;
     font-weight: 600;
     padding: 8px 14px;
     border-radius: 6px;
-    transition: background 0.3s ease;
+    transition: background 0.25s ease, transform 0.2s ease;
 }
 
 nav ul li a:hover,
 nav ul li a.active {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
 }
 
 /* ===========================
-   SUCCESS MESSAGE
+   MESSAGE BOXES
 =========================== */
 p {
     text-align: center;
@@ -66,50 +70,79 @@ p {
     margin-bottom: 15px;
 }
 
-/* ===========================
-   FORM CONTAINER
-=========================== */
-form {
-    max-width: 500px;
-    margin: 0 auto;
-    background: #ffffff;
-    padding: 25px 30px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+p[style*="green"] {
+    color: #0a7a50 !important;
+}
+
+p[style*="red"] {
+    color: #b00020 !important;
 }
 
 /* ===========================
-   FORM LABELS & INPUTS
+   FORM WRAPPER
+=========================== */
+form {
+    max-width: 520px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px 35px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    border: 1px solid #dce6e1;
+}
+
+/* ===========================
+   FORM LABELS
 =========================== */
 label {
     display: block;
-    margin-bottom: 15px;
     font-weight: 600;
+    font-size: 14px;
     color: #0a7a50;
+    margin-bottom: 14px;
 }
 
+/* ===========================
+   INPUTS & SELECTS
+=========================== */
 input[type="text"],
 input[type="number"],
-input[type="date"] {
+input[type="date"],
+select {
     width: 100%;
     padding: 10px 12px;
     margin-top: 6px;
     border: 1px solid #cfd8d3;
     border-radius: 8px;
     font-size: 14px;
-    transition: border 0.3s, box-shadow 0.3s;
+    color: #333;
+    transition: border 0.25s ease, box-shadow 0.25s ease;
 }
 
-input:focus {
+input:focus,
+select:focus {
     outline: none;
     border-color: #0a7a50;
     box-shadow: 0 0 0 3px rgba(10, 122, 80, 0.15);
 }
 
-/* READONLY STYLE */
+/* ===========================
+   READONLY INPUT STYLE
+=========================== */
 input[readonly] {
     background: #f1f5f3;
     color: #555;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   COURSE/YEAR SECTION
+=========================== */
+#courseYear {
+    background: #f7fbf9;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 /* ===========================
@@ -117,25 +150,25 @@ input[readonly] {
 =========================== */
 button {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     background: linear-gradient(180deg, #0a7a50, #066a41);
     border: none;
     border-radius: 10px;
     color: #ffffff;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.25s ease;
 }
 
 button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
 }
 
 button:active {
     transform: translateY(0);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 /* ===========================
@@ -143,7 +176,7 @@ button:active {
 =========================== */
 @media (max-width: 600px) {
     body {
-        padding: 15px;
+        padding: 20px 10px;
     }
 
     nav ul {
@@ -152,6 +185,10 @@ button:active {
     }
 
     h1 {
-        font-size: 26px;
+        font-size: 24px;
+    }
+
+    form {
+        padding: 25px;
     }
 }

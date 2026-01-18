@@ -1,5 +1,5 @@
 /* ===========================
-   GLOBAL RESET
+   GLOBAL RESET & BASE
 =========================== */
 * {
     margin: 0;
@@ -11,10 +11,12 @@
 body {
     background: #f4f7f6;
     color: #333;
+    min-height: 100vh;
+    line-height: 1.5;
 }
 
 /* ===========================
-   LAYOUT
+   LAYOUT STRUCTURE
 =========================== */
 .container {
     display: flex;
@@ -28,12 +30,14 @@ body {
     width: 240px;
     background: linear-gradient(180deg, #0a7a50, #066a41);
     color: #fff;
-    padding: 25px 20px;
+    padding: 30px 20px;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.12);
 }
 
 .sidebar h2 {
     text-align: center;
     margin-bottom: 30px;
+    font-size: 20px;
     letter-spacing: 1px;
 }
 
@@ -42,7 +46,7 @@ body {
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .sidebar ul li a {
@@ -50,106 +54,156 @@ body {
     padding: 12px 15px;
     color: #fff;
     text-decoration: none;
-    border-radius: 6px;
-    transition: background 0.3s ease;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background 0.25s ease, transform 0.15s ease;
 }
 
 .sidebar ul li a:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255,255,255,0.2);
+    transform: translateX(3px);
 }
 
 /* ===========================
-   MAIN CONTENT
+   MAIN CONTENT AREA
 =========================== */
 .main {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    padding: 35px 25px;
 }
 
 /* ===========================
-   TOP BAR
+   PAGE TITLE
 =========================== */
-.topbar {
-    background: #fff;
-    padding: 18px 30px;
-    border-bottom: 1px solid #ddd;
-}
-
-.topbar h1 {
-    font-size: 22px;
+.main h1 {
+    text-align: center;
+    margin-bottom: 25px;
     color: #0a7a50;
+    font-size: 28px;
 }
 
 /* ===========================
-   PAGE INNER
+   TOP NAVIGATION (Optional)
 =========================== */
-.page-inner {
-    padding: 30px;
+nav {
+    background: linear-gradient(180deg, #0a7a50, #066a41);
+    padding: 12px;
+    border-radius: 10px;
+    margin: 0 auto 25px auto;
+    max-width: 700px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: background 0.25s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ===========================
+   MESSAGE TEXT
+=========================== */
+p {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 12px;
 }
 
 /* ===========================
    FORM CARD
 =========================== */
-.item-form {
-    max-width: 600px;
+form {
+    max-width: 550px;
+    margin: 0 auto;
     background: #fff;
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
-
-.item-form label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-    margin-top: 15px;
-}
-
-.item-form input,
-.item-form select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    outline: none;
-    transition: border 0.3s;
-}
-
-.item-form input:focus,
-.item-form select:focus {
-    border-color: #0a7a50;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border: 1px solid #dce6e1;
 }
 
 /* ===========================
-   BUTTONS
+   FORM FIELDS
 =========================== */
-.item-form button {
-    margin-top: 25px;
-    background: #0a7a50;
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    font-size: 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.item-form button:hover {
-    background: #066a41;
-}
-
-.item-form a {
-    display: inline-block;
-    margin-left: 15px;
-    color: #555;
-    text-decoration: none;
+label {
+    display: block;
+    font-size: 14px;
     font-weight: 600;
+    color: #0a7a50;
+    margin-top: 12px;
 }
 
-.item-form a:hover {
-    color: #0a7a50;
+input,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cfd8d3;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 5px;
+    transition: border 0.25s ease, box-shadow 0.25s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #0a7a50;
+    box-shadow: 0 0 0 2px rgba(10,122,80,0.15);
+}
+
+/* READONLY INPUT */
+input[readonly] {
+    background: #f1f5f3;
+    color: #555;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   COURSE/YEAR BOX
+=========================== */
+#courseYear {
+    background: #f7fbf9;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* ===========================
+   BUTTON STYLE
+=========================== */
+button {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(180deg, #0a7a50, #066a41);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.18);
 }
 
 /* ===========================
@@ -160,11 +214,16 @@ body {
         display: none;
     }
 
-    .page-inner {
-        padding: 20px;
+    .main {
+        padding: 20px 15px;
     }
 
-    .item-form {
+    form {
         width: 100%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
     }
 }

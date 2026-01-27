@@ -4,15 +4,11 @@ session_start();
 /* ===============================
    DATABASE CONNECTION
 ================================ */
-$servername = "localhost";
-$username   = "root";
-$password   = "";
-$dbname     = "school_inventory";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli("localhost", "root", "", "school_inventory");
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Database Connection Failed: " . $conn->connect_error);
 }
+$conn->set_charset("utf8mb4");
 
 /* ===============================
    LOGIN CHECK
@@ -23,77 +19,76 @@ if (!isset($_SESSION['username'])) {
 }
 
 /* ===============================
-   GET BOOK ID (if any)
+   GET BOOK ID
 ================================ */
-$selected_book = $_GET['book_id'] ?? '';
-$reserve_date  = date("Y-m-d"); // today's date
+$selected_book = isset($_GET['book_id']) ? (int)$_GET['book_id'] : 0;
+$reserve_date  = date("Y-m-d");
 
 /* ===============================
-   RESERVE BOOK LOGIC
+   RESERVE BOOK
 ================================ */
 if (isset($_POST['reserve'])) {
 
     $borrower_type = $_POST['borrower_type'];
-    $book_id       = (int)$_POST['book_id'];
-    $student_id    = (int)$_POST['student_id'];
-    $student_name  = htmlspecialchars(trim($_POST['student_name']));
-    $course        = htmlspecialchars(trim($_POST['course']));
-    $year          = trim($_POST['year']);
-    $reserve_date  = $_POST['reserve_date'];
 
-    // Validate ID length
-    if ($borrower_type === "Student" && strlen((string)$student_id) != 7) {
-        $_SESSION['error'] = "Student ID must be 7 digits.";
-        header("Location: reserve.php");
+    $first_name  = trim($_POST['first_name']);
+    $middle_name = trim($_POST['middle_name']);
+    $last_name   = trim($_POST['last_name']);
+
+    $borrower_name = trim("$first_name $middle_name $last_name");
+
+    $borrower_id  = trim($_POST['borrower_id']);
+    $course       = trim($_POST['course'] ?? '');
+    $year         = intval($_POST['year'] ?? 0);
+    $book_id      = intval($_POST['book_id']);
+    $reserve_date = $_POST['reserve_date'];
+
+    /* ===============================
+       VALIDATION
+    ================================ */
+    if ($borrower_type === "Student" && strlen($borrower_id) != 7) {
+        $_SESSION['error'] = "Student Borrower ID must be 7 digits.";
+        header("Location: reserve.php?book_id=$book_id");
         exit();
     }
-    if ($borrower_type === "Teacher" && strlen((string)$student_id) != 5) {
-        $_SESSION['error'] = "Teacher ID must be 5 digits.";
-        header("Location: reserve.php");
+
+    if ($borrower_type === "Teacher" && strlen($borrower_id) != 5) {
+        $_SESSION['error'] = "Teacher Borrower ID must be 5 digits.";
+        header("Location: reserve.php?book_id=$book_id");
         exit();
     }
 
-    // Check if student/teacher exists
-    $stmt = $conn->prepare("SELECT student_id FROM students WHERE student_id=?");
-    $stmt->bind_param("i", $student_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 0) {
-        // Insert new student/teacher
-        $stmt_insert = $conn->prepare("
-            INSERT INTO students (student_id, student_name, course, year, borrower_type, phone_number)
-            VALUES (?, ?, ?, ?, ?, '')
-        ");
-        $year_int = ($borrower_type === "Student" && is_numeric($year)) ? (int)$year : 0;
-        $stmt_insert->bind_param("issis", $student_id, $student_name, $course, $year_int, $borrower_type);
-        $stmt_insert->execute();
-        $stmt_insert->close();
-    }
-    $stmt->close();
-
-    // Insert reservation
+    /* ===============================
+       INSERT RESERVATION
+    ================================ */
     $stmt = $conn->prepare("
-        INSERT INTO reservations 
-        (student_name, student_id, course, year, book_id, reserve_date, borrower_type)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO reservations
+        (first_name, middle_name, last_name, borrower_name, borrower_id, course, year, book_id, reserve_date, borrower_type)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    $year_int = ($borrower_type === "Student" && is_numeric($year)) ? (int)$year : 0;
+
     $stmt->bind_param(
-        "sisisss",
-        $student_name,
-        $student_id,
+        "ssssisiiss",
+        $first_name,
+        $middle_name,
+        $last_name,
+        $borrower_name,
+        $borrower_id,
         $course,
-        $year_int,
+        $year,
         $book_id,
         $reserve_date,
         $borrower_type
     );
-    $stmt->execute();
-    $stmt->close();
 
-    $_SESSION['message'] = ucfirst($borrower_type) . " reserved book successfully!";
-    header("Location: reserve.php");
+    if ($stmt->execute()) {
+        $_SESSION['message'] = "Book reserved successfully!";
+    } else {
+        $_SESSION['error'] = "Reservation failed.";
+    }
+
+    $stmt->close();
+    header("Location: reserve.php?book_id=$book_id");
     exit();
 }
 ?>
@@ -101,82 +96,79 @@ if (isset($_POST['reserve'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Reserve Book</title>
-    <link rel="stylesheet" href="reserve.css">
+<meta charset="UTF-8">
+<title>Reserve Book</title>
+<link rel="stylesheet" href="reserve.css">
 </head>
 <body>
 
 <h1>Reserve Book</h1>
 
 <nav>
-    <ul>
-        <li><a href="Books.php">BOOKS</a></li>
-        <li><a href="student_transaction.php">Student Transaction</a></li>
-        <li><a href="logout.php">Logout</a></li>
-    </ul>
+    <a href="Books.php">BOOKS</a> |
+    <a href="student_transaction.php">Borrower Transaction</a> |
+    <a href="logout.php">Logout</a>
 </nav>
 
 <?php if (isset($_SESSION['message'])): ?>
-    <p style="color:green;"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
+<p style="color:green"><?= $_SESSION['message']; unset($_SESSION['message']); ?></p>
 <?php endif; ?>
+
 <?php if (isset($_SESSION['error'])): ?>
-    <p style="color:red;"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+<p style="color:red"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
 <?php endif; ?>
 
 <form method="POST">
-    <label>Borrower Type:
-        <select name="borrower_type" id="borrower_type" onchange="toggleCourseYear()">
-            <option value="Student">Student</option>
-            <option value="Teacher">Teacher</option>
-        </select>
-    </label><br><br>
 
-    <label>Name:
-        <input type="text" name="student_name" required>
-    </label><br><br>
+<label>Borrower Type</label>
+<select name="borrower_type" id="borrower_type" onchange="toggleCourseYear()" required>
+    <option value="Student">Student</option>
+    <option value="Teacher">Teacher</option>
+</select>
 
-    <label>ID:
-        <input type="number" name="student_id" id="borrower_id" required>
-    </label><br><br>
+<label>First Name</label>
+<input type="text" name="first_name" required>
 
-    <div id="courseYear">
-        <label>Course:
-            <input type="text" name="course">
-        </label><br><br>
+<label>Middle Name</label>
+<input type="text" name="middle_name">
 
-        <label>Year:
-            <input type="number" name="year">
-        </label><br><br>
-    </div>
+<label>Last Name</label>
+<input type="text" name="last_name" required>
 
-    <label>Book ID:
-        <input type="number" name="book_id" value="<?= htmlspecialchars($selected_book) ?>" readonly required>
-    </label><br><br>
+<label>Borrower ID</label>
+<input type="number" name="borrower_id" id="borrower_id" required>
 
-    <label>Reserve Date:
-        <input type="date" name="reserve_date" value="<?= $reserve_date ?>" required>
-    </label><br><br>
+<div id="courseYear">
+    <label>Course</label>
+    <input type="text" name="course">
 
-    <button type="submit" name="reserve">Reserve</button>
+    <label>Year</label>
+    <input type="number" name="year">
+</div>
+
+<label>Book ID</label>
+<input type="number" name="book_id" value="<?= htmlspecialchars($selected_book) ?>" readonly required>
+
+<label>Reserve Date</label>
+<input type="date" name="reserve_date" value="<?= $reserve_date ?>" required>
+
+<button type="submit" name="reserve">Reserve</button>
 </form>
 
 <script>
 function toggleCourseYear() {
-    let type = document.getElementById('borrower_type').value;
-    let courseYear = document.getElementById('courseYear');
-    let borrowerId = document.getElementById('borrower_id');
+    const type = document.getElementById('borrower_type').value;
+    const courseYear = document.getElementById('courseYear');
+    const borrowerId = document.getElementById('borrower_id');
 
-    if(type === "Teacher") {
+    if (type === 'Teacher') {
         courseYear.style.display = 'none';
-        borrowerId.placeholder = "5-digit Teacher ID";
+        borrowerId.placeholder = '5-digit Borrower ID';
     } else {
         courseYear.style.display = 'block';
-        borrowerId.placeholder = "7-digit Student ID";
+        borrowerId.placeholder = '7-digit Borrower ID';
     }
 }
-
-// Initialize on page load
 window.onload = toggleCourseYear;
 </script>
 

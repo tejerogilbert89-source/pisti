@@ -1,136 +1,183 @@
 /* ===========================
-   GLOBAL RESET & BASE
+   RESET & VARIABLES
 =========================== */
+:root {
+    --green-dark: #064e3b;
+    --green-main: #0b7a4f;
+    --green-light: #eaf6f0;
+
+    --white: #ffffff;
+    --gray-100: #f9fafb;
+    --gray-200: #e5e7eb;
+    --gray-600: #4b5563;
+
+    --shadow-soft: 0 10px 30px rgba(0,0,0,.15);
+    --radius-lg: 18px;
+    --radius-pill: 999px;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
-}
-
-body {
-    display: flex;
-    min-height: 100vh;
-    background: #f4f7f6;
-    color: #333;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* ===========================
-   SIDEBAR
+   BODY BACKGROUND
+=========================== */
+body {
+    min-height: 100vh;
+    color: #1f2937;
+    background:
+        linear-gradient(rgba(0, 58, 36, 0.9), rgba(6, 94, 60, 0.9)),
+        url("haruy.png.jpg") center / cover no-repeat fixed;
+}
+
+/* ===========================
+   TOP NAVBAR
 =========================== */
 .sidebar {
-    width: 240px;
-    background: linear-gradient(180deg, #0a7a50, #066a41);
-    color: #fff;
-    padding: 25px 20px;
-    box-shadow: 4px 0 12px rgba(0,0,0,.15);
     position: fixed;
-    height: 100vh;
+    top: 0;
+    width: 100%;
+    height: 64px;
+    background: linear-gradient(180deg, #0b7a4f, #065f3b);
+    box-shadow: 0 6px 20px rgba(0,0,0,.25);
+    z-index: 1000;
+}
+
+.sidebar nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
 }
 
 .sidebar h2 {
-    text-align: center;
-    font-size: 1.7rem;
-    font-weight: 700;
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: 900;
     letter-spacing: 1px;
-    margin-bottom: 35px;
 }
 
 .sidebar ul {
     list-style: none;
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
 }
 
 .sidebar ul li a {
-    display: block;
-    padding: 12px 15px;
-    margin-bottom: 8px;
-    color: #fff;
+    padding: 9px 18px;
+    border-radius: var(--radius-pill);
+    color: #e5e7eb;
+    font-size: 13px;
+    font-weight: 600;
     text-decoration: none;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: 0.25s;
+    background: rgba(255,255,255,.15);
+    transition: all .25s ease;
 }
 
-.sidebar ul li a:hover,
+.sidebar ul li a:hover {
+    background: rgba(255,255,255,.28);
+}
+
 .sidebar ul li a.active {
-    background: rgba(255,255,255,0.2);
-    padding-left: 22px;
+    background: var(--white);
+    color: var(--green-dark);
 }
 
 /* ===========================
    MAIN CONTENT
 =========================== */
 .main {
-    margin-left: 240px;
-    flex: 1;
-    padding: 35px 40px;
+    padding: 100px 24px 40px;
+    max-width: 1400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* ===========================
-   HEADINGS
-=========================== */
+/* HEADINGS */
 .main h1 {
     text-align: center;
-    color: #0a7a50;
-    font-size: 2rem;
-    margin-bottom: 25px;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: 40px;
 }
 
 .main h2 {
-    color: #066a41;
-    margin: 25px 0 12px;
+    width: 100%;
+    max-width: 1400px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    margin: 40px 0 18px;
 }
 
 /* ===========================
-   ADD BOOK FORM GRID
+   FORM (ADD BOOK)
 =========================== */
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    background: #ffffff;
-    padding: 22px;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    margin-bottom: 25px;
-}
-
-.form-grid input,
-.form-grid select {
+form {
     width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 13px;
-    transition: 0.25s;
-    background: #f9fafb;
+    max-width: 900px;
+   
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+
+    border-radius: var(--radius-lg);
+   
+   
 }
 
-.form-grid input:focus,
-.form-grid select:focus {
+form input,
+form select {
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--gray-200);
+    background: var(--gray-100);
+    font-size: 14px;
+}
+
+form input:focus,
+form select:focus {
     outline: none;
-    border-color: #0a7a50;
-    box-shadow: 0 0 0 3px rgba(10,122,80,0.18);
+    border-color: var(--green-main);
+    box-shadow: 0 0 0 3px rgba(11,122,79,.25);
     background: #fff;
 }
 
-.form-grid button {
-    grid-column: span 4;
-    justify-self: center;
-    padding: 10px 30px;
-    background: linear-gradient(145deg, #0a7a50, #0c8b60);
-    color: #fff;
+form button {
+    grid-column: span 2;
+   
+    border-radius: var(--radius-pill);
     border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
+    background: var(--green-main);
+    color: #fff;
     font-size: 14px;
-    transition: 0.25s;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .25s;
 }
 
-.form-grid button:hover {
-    background: linear-gradient(145deg, #066a41, #08845a);
-    transform: translateY(-1px);
+form button:hover {
+    background: var(--green-dark);
+}
+
+/* ===========================
+   BOOK LIST WRAPPER (CENTER)
+=========================== */
+.book-list-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* ===========================
@@ -138,124 +185,117 @@ body {
 =========================== */
 #search {
     width: 100%;
-    padding: 9px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 13px;
-    margin-bottom: 15px;
+    max-width: 1000px;
+    margin-bottom: 26px;
+    padding: 16px 22px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--gray-200);
+    font-size: 14px;
+    background: var(--white);
 }
 
 /* ===========================
-   TABLE CONTAINER
+   TABLE
 =========================== */
-.table-container {
+.table-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
     overflow-x: auto;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.05);
 }
 
-/* ===========================
-   TABLE STYLING
-=========================== */
 table {
     width: 100%;
+    min-width: 1300px;
+    max-width: 1400px;
     border-collapse: collapse;
-    min-width: 1000px;
-}
-
-table th,
-table td {
-    padding: 6px 10px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
     font-size: 13px;
-    border-bottom: 1px solid #e5e7eb;
-    white-space: nowrap;
 }
 
 table th {
-    background: #0a7a50;
-    color: #fff;
-    font-weight: 600;
+    background: var(--green-main);
+    color: var(--white);
+    padding: 14px;
+    font-weight: 700;
     text-align: left;
+    white-space: nowrap;
+}
+
+table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--gray-200);
+    white-space: nowrap;
 }
 
 table tr:nth-child(even) {
-    background: #f8faf8;
+    background: #f8faf9;
 }
 
 table tr:hover {
-    background: #e6f4ed;
+    background: var(--green-light);
 }
 
 /* ===========================
-   BUTTONS
+   BUTTONS & LINKS
 =========================== */
 button,
 a {
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
     font-size: 12px;
-    padding: 5px 10px;
-    border-radius: 6px;
-    text-decoration: none;
+    font-weight: 600;
     border: none;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
+    text-decoration: none;
+    transition: .2s;
 }
 
-.btn-primary {
-    background: #0a7a50;
+button[name="adjust_qty"] {
+    background: var(--green-main);
     color: #fff;
 }
 
-.btn-primary:hover {
-    background: #066a41;
+button[name="adjust_qty"]:hover {
+    background: var(--green-dark);
 }
 
-.btn-danger,
-a.delete {
-    background: #ef4444;
-    color: #fff;
+a {
+    background: var(--gray-200);
+    color: #111827;
 }
 
-.btn-danger:hover,
-a.delete:hover {
+a:hover {
+    background: #d1d5db;
+}
+
+button[name="delete_reserve"] {
     background: #dc2626;
-}
-
-/* ===========================
-   BUTTON GROUP
-=========================== */
-.button-group {
-    display: flex;
-    gap: 5px;
+    color: #fff;
 }
 
 /* ===========================
    RESPONSIVE
 =========================== */
 @media (max-width: 900px) {
-    body {
-        flex-direction: column;
+    form {
+        grid-template-columns: 1fr;
     }
 
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
+    form button {
+        grid-column: span 1;
     }
 
-    .main {
-        margin-left: 0;
-        padding: 20px;
+    .sidebar nav {
+        padding: 0 20px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    .form-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .form-grid button {
-        grid-column: span 2;
+    .sidebar ul {
+        margin-top: 8px;
     }
 }

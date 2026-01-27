@@ -69,6 +69,7 @@ $items = $conn->query("SELECT * FROM books ORDER BY book_id DESC");
         <header class="topbar"><h1>Manage Items</h1></header>
 
         <section class="page-inner">
+            <input type="text" id="search" placeholder="Search books..." onkeyup="searchTable()">
 
             <!-- ADD ITEM FORM -->
             <form method="POST" class="item-form">

@@ -3,37 +3,14 @@ session_start();
 include "db.php";
 
 /* ===============================
-   LOGIN CHECK (STUDENT)
+   LOGIN CHECK (BORROWER)
 ================================ */
-if (!isset($_SESSION['username'], $_SESSION['student_id'])) {
+if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-$student_id = (int)$_SESSION['student_id'];
-
-/* ===============================
-   HANDLE RESERVATION DATE UPDATE
-================================ */
-if (isset($_POST['update_date'])) {
-
-    $book_id      = (int)$_POST['book_id'];
-    $reserve_date = $_POST['reserve_date'];
-
-    // Update ONLY the logged-in student's reservation
-    $stmt = $conn->prepare("
-        UPDATE reservations
-        SET reserve_date = ?
-        WHERE book_id = ?
-          AND student_id = ?
-    ");
-    $stmt->bind_param("sii", $reserve_date, $book_id, $student_id);
-    $stmt->execute();
-    $stmt->close();
-
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
-}
+$borrower_id = (int)$_SESSION['borrower_id'];
 
 /* ===============================
    FETCH BOOKS + BORROW + RESERVE
@@ -52,13 +29,13 @@ SELECT
     b.Shelf_Location,
 
     -- Borrow info
-    s1.student_name AS borrower_name,
-    s1.student_id   AS borrower_id,
+    s1.borrower_name AS borrower_name,
+    s1.borrower_id   AS borrower_id,
     t.date_borrowed,
 
     -- Reservation info
-    r.student_name  AS reserver_name,
-    r.student_id    AS reserver_id,
+    r.borrower_name  AS reserver_name,
+    r.borrower_id    AS reserver_id,
     r.reserve_date
 
 FROM books b
@@ -67,8 +44,8 @@ LEFT JOIN transactions t
     ON b.book_id = t.book_id
    AND t.date_returned IS NULL
 
-LEFT JOIN students s1 
-    ON t.student_id = s1.student_id
+LEFT JOIN borrower s1 
+    ON t.borrower_id = s1.borrower_id
 
 LEFT JOIN reservations r 
     ON b.book_id = r.book_id
@@ -83,18 +60,18 @@ $books = $conn->query($sql);
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Books</title>
-<link rel="stylesheet" href="wars.css">
+<title>Library Books</title>
+<link rel="stylesheet" href="books.css">
 </head>
 <body>
 
 <div class="container">
 
 <aside class="sidebar">
-    <h2>STUDENT</h2>
+    <h2>BORROWER</h2>
     <ul>
         <li><a class="active" href="#">Books</a></li>
-        <li><a href="Student_transaction.php">Student Transaction</a></li>
+        <li><a href="student_transaction.php">My Transactions</a></li>
         <li><a href="logout.php">Logout</a></li>
     </ul>
 </aside>
@@ -120,7 +97,7 @@ $books = $conn->query($sql);
     <th>Borrowed By</th>
     <th>Reserved By</th>
     <th>Reserve Date</th>
-    <th>Reserve</th>
+    <th>Action</th>
 </tr>
 
 <?php while ($row = $books->fetch_assoc()): ?>
@@ -153,26 +130,17 @@ $books = $conn->query($sql);
 
 <!-- Reserve Date -->
 <td>
-<?php if ($row['reserver_id'] == $student_id): ?>
-    <form method="POST">
-        <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
-        <input type="date" name="reserve_date"
-               value="<?= date('Y-m-d', strtotime($row['reserve_date'])) ?>" required>
-    </form>
-<?php elseif ($row['reserve_date']): ?>
-    <?= date("M d, Y", strtotime($row['reserve_date'])) ?>
-<?php else: ?>
-    —
-<?php endif; ?>
+<?= $row['reserve_date']
+    ? date("M d, Y", strtotime($row['reserve_date']))
+    : "—"; ?>
 </td>
 
-<!-- Reserve Button -->
+<!-- Action -->
 <td style="text-align:center;">
 <?php if ($row['available'] > 0 && !$row['reserver_id']): ?>
     <form method="GET" action="reserve.php">
         <input type="hidden" name="book_id" value="<?= $row['book_id'] ?>">
         <button type="submit">RESERVE</button>
-        
     </form>
 <?php else: ?>
     —

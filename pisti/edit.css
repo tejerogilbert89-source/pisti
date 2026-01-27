@@ -1,22 +1,29 @@
 /* ===========================
-   GLOBAL RESET & BASE
+   RESET & BASE
 =========================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 body {
-    background: #f4f7f6;
-    color: #333;
     min-height: 100vh;
-    line-height: 1.5;
+    color: #1f2937;
+    background-image:
+        linear-gradient(
+            rgba(0, 58, 36, 0.85),
+            rgba(6, 94, 60, 0.85)
+        ),
+        url("huray.png.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* ===========================
-   LAYOUT STRUCTURE
+   CONTAINER
 =========================== */
 .container {
     display: flex;
@@ -28,202 +35,197 @@ body {
 =========================== */
 .sidebar {
     width: 240px;
-    background: linear-gradient(180deg, #0a7a50, #066a41);
-    color: #fff;
-    padding: 30px 20px;
-    box-shadow: 4px 0 15px rgba(0,0,0,0.12);
+    background: linear-gradient(180deg, #0b7a4f, #096b45);
+    padding: 24px 20px;
+    box-shadow: 4px 0 18px rgba(0,0,0,.18);
 }
 
 .sidebar h2 {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 800;
     text-align: center;
     margin-bottom: 30px;
-    font-size: 20px;
     letter-spacing: 1px;
 }
 
 .sidebar ul {
     list-style: none;
-}
-
-.sidebar ul li {
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .sidebar ul li a {
     display: block;
-    padding: 12px 15px;
-    color: #fff;
+    padding: 12px 18px;
+    border-radius: 999px;
+    color: #e5e7eb;
+    font-size: 13px;
+    font-weight: 600;
     text-decoration: none;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: background 0.25s ease, transform 0.15s ease;
+    background: rgba(255,255,255,.15);
+    transition: .25s;
+    text-align: center;
 }
 
 .sidebar ul li a:hover {
-    background: rgba(255,255,255,0.2);
-    transform: translateX(3px);
+    background: rgba(255,255,255,.28);
+}
+
+.sidebar ul li a.active {
+    background: #ffffff;
+    color: #065f3b;
 }
 
 /* ===========================
-   MAIN CONTENT AREA
+   MAIN CONTENT
 =========================== */
 .main {
     flex: 1;
-    padding: 35px 25px;
+    padding: 80px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* ===========================
-   PAGE TITLE
+   HEADING
 =========================== */
 .main h1 {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #0a7a50;
-    font-size: 28px;
-}
-
-/* ===========================
-   TOP NAVIGATION (Optional)
-=========================== */
-nav {
-    background: linear-gradient(180deg, #0a7a50, #066a41);
-    padding: 12px;
-    border-radius: 10px;
-    margin: 0 auto 25px auto;
-    max-width: 700px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 6px;
-    transition: background 0.25s ease;
-}
-
-nav ul li a:hover,
-nav ul li a.active {
-    background: rgba(255,255,255,0.2);
-}
-
-/* ===========================
-   MESSAGE TEXT
-=========================== */
-p {
-    text-align: center;
-    font-weight: 600;
-    margin-bottom: 12px;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 30px;
 }
 
 /* ===========================
    FORM CARD
 =========================== */
 form {
-    max-width: 550px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    border: 1px solid #dce6e1;
-}
-
-/* ===========================
-   FORM FIELDS
-=========================== */
-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #0a7a50;
-    margin-top: 12px;
-}
-
-input,
-select {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #cfd8d3;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-top: 5px;
-    transition: border 0.25s ease, box-shadow 0.25s ease;
+    max-width: 900px;
+    background: #ffffff;
+    padding: 30px 36px;
+    border-radius: 20px;
+    box-shadow: 0 20px 45px rgba(0,0,0,.15);
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 22px;
 }
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #0a7a50;
-    box-shadow: 0 0 0 2px rgba(10,122,80,0.15);
-}
-
-/* READONLY INPUT */
-input[readonly] {
-    background: #f1f5f3;
-    color: #555;
-    cursor: not-allowed;
-}
-
-/* ===========================
-   COURSE/YEAR BOX
-=========================== */
-#courseYear {
-    background: #f7fbf9;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
-/* ===========================
-   BUTTON STYLE
-=========================== */
-button {
-    width: 100%;
-    padding: 13px;
-    background: linear-gradient(180deg, #0a7a50, #066a41);
-    border: none;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 15px;
+/* LABELS */
+form label {
+    font-size: 13px;
     font-weight: 700;
-    cursor: pointer;
-    margin-top: 18px;
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    color: #374151;
+    margin-bottom: 6px;
 }
 
-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+/* INPUTS & SELECT */
+form input,
+form select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    font-size: 14px;
+}
+
+form input:focus,
+form select:focus {
+    outline: none;
+    border-color: #0b7a4f;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(11,122,79,.22);
+}
+
+/* FULL WIDTH ITEMS */
+form p,
+form button,
+form a {
+    grid-column: span 2;
+}
+
+/* INFO TEXT */
+form p {
+    font-size: 14px;
+    color: #374151;
+    margin-top: 6px;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+form button {
+    margin-top: 16px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    border: none;
+    background: #0b7a4f;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .25s;
+}
+
+form button:hover {
+    background: #075f3c;
+}
+
+/* CANCEL LINK */
+form a {
+    margin-top: 10px;
+    text-align: center;
+    padding: 12px 26px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    color: #111827;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+form a:hover {
+    background: #d1d5db;
 }
 
 /* ===========================
    RESPONSIVE
 =========================== */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    form p,
+    form button,
+    form a {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 700px) {
+    .container {
+        flex-direction: column;
+    }
+
     .sidebar {
-        display: none;
+        width: 100%;
+        box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    }
+
+    .sidebar ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .main {
-        padding: 20px 15px;
-    }
-
-    form {
-        width: 100%;
-    }
-
-    nav ul {
-        flex-direction: column;
-        gap: 10px;
+        padding: 40px 16px;
     }
 }

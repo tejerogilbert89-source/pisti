@@ -1,0 +1,229 @@
+/* ===========================
+   RESET & BASE
+=========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+     min-height: 100vh;
+    color: #1f2937;
+    background:
+        linear-gradient(rgba(4, 43, 28, 0.88), rgba(1, 75, 46, 0.88)),
+        url("huray.png.jpg") center / cover no-repeat fixed;
+}
+
+
+/* ===========================
+   TOP NAVBAR
+=========================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    background: linear-gradient(180deg, #0b7a4f, #096b45);
+    z-index: 1000;
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.sidebar h2 {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    margin-left: auto;
+    align-items: center;
+}
+
+.sidebar ul li a {
+    padding: 9px 18px;
+    border-radius: 999px;
+    color: #e5e7eb;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    background: rgba(255,255,255,.15);
+    transition: .25s;
+}
+
+.sidebar ul li a:hover {
+    background: rgba(255,255,255,.25);
+}
+
+.sidebar ul li a.active {
+    background: #ffffff;
+    color: #065f3b;
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+.main {
+    padding: 100px 40px 40px;
+    max-width: 1600px;
+    margin: auto;
+}
+
+/* ===========================
+   HEADINGS
+=========================== */
+.main h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 30px;
+}
+
+/* ===========================
+   SEARCH BAR
+=========================== */
+#search {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 20px;
+    padding: 16px 22px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    background: #ffffff;
+    display: block;
+}
+
+#search:focus {
+    outline: none;
+    border-color: #0b7a4f;
+    box-shadow: 0 0 0 4px rgba(11,122,79,.2);
+}
+
+/* ===========================
+   TABLE WRAPPER
+=========================== */
+.table-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+/* ===========================
+   TABLE
+=========================== */
+table {
+    width: 100%;
+    min-width: 1400px;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,.08);
+    font-size: 13px;
+}
+
+table th {
+    background: #0b7a4f;
+    color: #ffffff;
+    padding: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-align: left;
+}
+
+table td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+table tr:nth-child(even) {
+    background: #f8faf9;
+}
+
+table tr:hover {
+    background: #eaf6f0;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+button {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: .2s;
+}
+
+button:hover {
+    opacity: .9;
+}
+
+form button {
+    background: #0b7a4f;
+    color: #ffffff;
+}
+
+form button:hover {
+    background: #075f3c;
+}
+
+/* ===========================
+   DATE INPUT
+=========================== */
+input[type="date"] {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    font-size: 12px;
+}
+
+input[type="date"]:focus {
+    outline: none;
+    border-color: #0b7a4f;
+}
+
+/* ===========================
+   LINKS
+=========================== */
+a {
+    text-decoration: none;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 900px) {
+    .sidebar {
+        flex-wrap: wrap;
+        justify-content: center;
+        height: auto;
+        padding: 12px;
+    }
+
+    .sidebar ul {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .main {
+        padding: 140px 16px 20px;
+    }
+}

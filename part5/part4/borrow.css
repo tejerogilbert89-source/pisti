@@ -1,0 +1,330 @@
+/* ===========================
+   RESET & BASE
+=========================== */
+* {
+    margin: 0;
+  
+    box-sizing: border-box;
+    font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    color: #1f3723;
+
+    /* Background */
+    background:
+        linear-gradient(rgba(4, 43, 28, 0.88), rgba(1, 75, 46, 0.88)),
+        url("huray.png.jpg") center / cover no-repeat fixed;
+
+    /* GAP for fixed top admin bar */
+    padding-top: 90px;
+}
+
+/* ===========================
+   FIXED TOP ADMIN BAR
+=========================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(180deg, #0b7a4f, #096b45);
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    z-index: 1000;
+    box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+/* Admin title */
+.sidebar h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+/* Top menu */
+.sidebar ul {
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    margin-left: auto;
+}
+
+.sidebar ul li a {
+    padding: 9px 20px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    background: rgba(255,255,255,.18);
+    text-decoration: none;
+    transition: .25s;
+}
+
+.sidebar ul li a:hover {
+    background: rgba(255,255,255,.32);
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+.main-content {
+    padding: 40px;
+    max-width: 1600px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 40px;
+}
+
+/* ===========================
+   BORROW FORM
+=========================== */
+.borrow-form {
+    max-width: 1400px;
+    margin: auto;
+    padding: 32px;
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+/* Borrower Type */
+.borrower-type-section {
+    max-width: 420px;
+    margin: auto;
+    background: rgba(11, 122, 79, 0.18);
+    border-radius: 16px;
+    padding: 20px 30px;
+    font-weight: 700;
+    color: #e6f4ea;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.borrower-type-section label {
+    min-width: 140px;
+    font-size: 1.1rem;
+}
+
+.borrower-type-section select {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+}
+
+/* Name Fields */
+.name-fields {
+    display: flex;
+    gap: 16px;
+}
+
+.name-fields .form-group {
+    flex: 1;
+}
+
+/* Grid Fields */
+.grid-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+/* Form Group */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-weight: 700;
+    color: #e6f4ea;
+}
+
+.form-group input,
+.form-group select {
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: none;
+    font-size: 14px;
+    background: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(11,122,79,.3);
+}
+
+/* Borrow Button */
+.borrow-form button {
+    align-self: center;
+    padding: 14px 40px;
+    border-radius: 999px;
+    border: none;
+    background: #0b7a4f;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.borrow-form button:hover {
+    background: #075f3c;
+}
+
+/* ===========================
+   SEARCH BAR DESIGN
+=========================== */
+form[method="GET"] {
+    max-width: 800px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+form[method="GET"] input[type="text"] {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: none;
+    font-size: 14px;
+    background: rgba(255,255,255,0.9);
+    transition: 0.3s;
+}
+
+form[method="GET"] input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(11,122,79,.3);
+}
+
+form[method="GET"] button {
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: none;
+    background: #0b7a4f;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+form[method="GET"] button:hover {
+    background: #075f3c;
+}
+
+form[method="GET"] a {
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: #ccc;
+    text-decoration: none;
+    color: #000;
+    font-weight: 700;
+    transition: 0.25s;
+}
+
+form[method="GET"] a:hover {
+    background: #999;
+}
+
+/* ===========================
+   TABLE
+=========================== */
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 40px;
+}
+
+table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+table th {
+    background: #0b7a4f;
+    color: #fff;
+    padding: 14px;
+    font-weight: 800;
+    text-align: left;
+}
+
+table td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+table tr:hover {
+    background: #eaf6f0;
+}
+
+/* ===========================
+   ACTION BUTTONS
+=========================== */
+button[name="return"] {
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    background: #0b7a4f;
+    color: #fff;
+}
+
+button[name="return"]:hover {
+    background: #075f3c;
+}
+
+/* ===========================
+   MESSAGES
+=========================== */
+p {
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 900px) {
+
+    .name-fields {
+        flex-direction: column;
+    }
+
+    .grid-row {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        min-width: 900px;
+    }
+
+    .sidebar {
+        padding: 0 20px;
+    }
+}

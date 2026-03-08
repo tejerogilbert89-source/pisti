@@ -1,0 +1,298 @@
+/* =========================
+   RESET & BASE
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0, 50, 25, 0.85), rgba(0, 100, 50, 0.85)),
+        url("huray.png.jpg") center/cover no-repeat fixed;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+    padding-top: 110px; /* space for fixed navbar */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* =========================
+   TOP NAVBAR
+========================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #0b7a4f;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.sidebar h2 {
+    margin-left: 40px;
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+
+.sidebar ul {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.3s, transform 0.2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+.main {
+
+}
+
+/* =========================
+   HEADINGS
+========================= */
+h2 {
+    margin: 40px 0 20px;
+    font-size: 1.8rem;
+}
+
+/* =========================
+   SEARCH BAR
+========================= */
+#search {
+    width: 100%;
+    max-width: 900px;
+    margin: 25px auto 40px auto;
+    display: block;
+    padding: 15px 25px;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+#search:focus {
+    box-shadow: 0 0 0 4px rgba(11,122,79,0.35);
+}
+
+/* =========================
+   TABLE
+========================= */
+table {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 60px auto;
+    border-collapse: collapse;
+    background: #fff;
+    color: #000;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+th {
+    background: #0b7a4f;
+    color: #fff;
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+tr:hover {
+    background: #e0f2e9;
+}
+
+/* =========================
+   TABLE ACTIONS
+========================= */
+td form {
+    display: inline;
+    padding: 0;
+    background: none;
+}
+
+.shelf-buttons{
+
+text-align:center;
+
+margin-bottom:25px;
+
+}
+
+.shelf-buttons button{
+
+padding:7px 16px;
+
+border:none;
+
+border-radius:20px;
+
+margin:4px;
+
+font-size:13px;
+
+font-weight:600;
+
+cursor:pointer;
+
+background:#fff;
+
+color:#0b7a4f;
+
+transition:0.25s;
+
+}
+
+.shelf-buttons button:hover{
+
+background:#0b7a4f;
+
+color:#fff;
+
+transform:translateY(-2px);
+
+}
+td button {
+    padding: 6px 10px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: #0b7a4f;
+    color: #fff;
+    margin: 2px;
+}
+
+td button:hover {
+    background: #0da15d;
+}
+
+td a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0b7a4f;
+    margin: 0 5px;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* DELETE RESERVE BUTTON */
+td button[style*="background:red"] {
+    background: #c0392b !important;
+}
+
+/* MULTI SELECT (Borrower / Reserve Date) */
+td select {
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+/* =========================
+   RESERVE BUTTON
+========================= */
+.reserve-btn {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: none;
+    background: #0b7a4f;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.reserve-btn:hover {
+    background: #0da15d;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1100px) {
+
+    .main {
+        max-width: 95%;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .container {
+        padding: 100px 20px 40px;
+    }
+
+    .sidebar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 0;
+    }
+
+    .sidebar h2 {
+        margin: 0;
+        margin-bottom: 10px;
+    }
+
+    .sidebar ul {
+        flex-direction: column;
+        gap: 8px;
+        margin: 0;
+    }
+
+    #search {
+        max-width: 100%;
+    }
+}

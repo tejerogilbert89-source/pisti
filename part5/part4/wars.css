@@ -1,0 +1,292 @@
+/* =========================
+   RESET & BASE
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0, 50, 25, 0.85), rgba(0, 100, 50, 0.85)),
+        url("huray.png.jpg") center/cover no-repeat fixed;
+    color: #fff;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+    padding-top: 90px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+/* =========================
+   TOP NAVBAR
+========================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #0b7a4f;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.sidebar nav {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.sidebar h2 {
+    margin-right: auto;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+/* NAV LINKS */
+.sidebar ul {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   MAIN
+========================= */
+.main {
+    max-width: 1800px;
+    margin: auto;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+h2 {
+    margin: 40px 0 20px;
+    font-size: 1.8rem;
+}
+
+/* =========================
+   ADD BOOK FORM
+========================= */
+.book-form {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 16px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+}
+
+/* INPUTS */
+.book-form input,
+.book-form select {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    color: #000;
+}
+
+.book-form input::placeholder {
+    color: #666;
+}
+
+.book-form select {
+    color: #666;
+}
+
+/* =========================
+   CENTERED ADD BOOK BUTTON
+========================= */
+.add-book-btn {
+    grid-column: 1 / -1;        /* span entire row */
+    justify-self: center;       /* center horizontally */
+    width: 280px;               /* fixed width */
+    padding: 16px 24px;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(90deg, #0b7a4f, #0da15d);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 12px rgba(13, 161, 93, 0.4);
+}
+
+.add-book-btn:hover {
+    background: linear-gradient(90deg, #0da15d, #0b7a4f);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(13, 161, 93, 0.5);
+}
+
+/* =========================
+   SEARCH BAR
+========================= */
+#search {
+    width: 100%;
+    max-width: 1200px;
+    margin: 25px auto;
+    display: block;
+    padding: 15px 25px;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+}
+
+#search:focus {
+    box-shadow: 0 0 0 4px rgba(11,122,79,0.35);
+}
+
+/* =========================
+   TABLE
+========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    color: #000;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 60px;
+}
+
+th {
+    background: #0b7a4f;
+    color: #fff;
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+tr:hover {
+    background: #e0f2e9;
+}
+
+/* =========================
+   TABLE ACTIONS
+========================= */
+td form {
+    display: inline;
+    background: none;
+}
+
+td button {
+    padding: 6px 10px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: #0b7a4f;
+    color: #fff;
+    margin: 2px;
+}
+
+td button:hover {
+    background: #0da15d;
+}
+
+td a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0b7a4f;
+    margin: 0 5px;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* DELETE BUTTON */
+td button[style*="background:red"] {
+    background: #c0392b !important;
+}
+
+/* MULTI BORROWER SELECT */
+td select {
+    padding: 6px 10px;
+    border-radius: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1100px) {
+    .book-form {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .container {
+        padding: 100px 20px 40px;
+    }
+
+    .sidebar ul {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .book-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .add-book-btn {
+        width: 100%;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}

@@ -1,0 +1,247 @@
+/* =========================
+   RESET
+========================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body{
+background:
+linear-gradient(rgba(4,43,28,0.88),rgba(1,75,46,0.88)),
+url("huray.png.jpg") center/cover no-repeat fixed;
+color:#1b4332;
+padding:100px 20px 40px;
+min-height:100vh;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.sidebar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:70px;
+background:linear-gradient(180deg,#0b7a4f,#096b45);
+display:flex;
+align-items:center;
+padding:0 40px;
+z-index:1000;
+box-shadow:0 4px 12px rgba(0,0,0,0.25);
+}
+
+.sidebar h2{
+color:white;
+font-size:22px;
+font-weight:bold;
+}
+
+.sidebar ul{
+list-style:none;
+display:flex;
+gap:12px;
+margin-left:auto;
+}
+
+.sidebar ul li a{
+text-decoration:none;
+padding:8px 18px;
+border-radius:25px;
+background:rgba(255,255,255,0.18);
+color:white;
+font-size:13px;
+font-weight:bold;
+transition:0.25s;
+}
+
+.sidebar ul li a:hover{
+background:rgba(255,255,255,0.35);
+}
+
+/* =========================
+   HEADINGS
+========================= */
+
+h1{
+text-align:center;
+color:white;
+margin-bottom:20px;
+}
+
+h2{
+margin-top:30px;
+color:white;
+text-align:center;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+p{
+text-align:center;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.borrow-form{
+max-width:1000px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+margin-bottom:10px;
+}
+
+.form-group label{
+font-weight:bold;
+margin-bottom:3px;
+}
+
+.form-group input,
+.form-group select{
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+.form-group small{
+font-size:12px;
+color:#666;
+}
+
+/* =========================
+   GRID ROW
+========================= */
+
+.grid-row{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-top:10px;
+}
+
+.grid-row .form-group{
+flex:1;
+min-width:150px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+button{
+padding:8px 18px;
+border:none;
+border-radius:6px;
+background:#0b7a4f;
+color:white;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+transition:0.25s;
+}
+
+button:hover{
+background:#075f3c;
+}
+
+/* =========================
+   FILTER FORM
+========================= */
+
+form[method="GET"]{
+text-align:center;
+margin-top:15px;
+}
+
+/* =========================
+   SEARCH BAR
+========================= */
+
+#search{
+display:block;
+margin:20px auto;
+width:50%;
+padding:8px;
+border-radius:20px;
+border:1px solid #ccc;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+margin-top:15px;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+th{
+background:#0b7a4f;
+color:white;
+padding:10px;
+}
+
+td{
+padding:8px;
+border-bottom:1px solid #eee;
+}
+
+tr:nth-child(even){
+background:#f9f9f9;
+}
+
+tr:hover{
+background:#eef7f2;
+}
+
+/* =========================
+   OVERDUE ROW
+========================= */
+
+.overdue-row{
+background:#ffe6e6;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+.grid-row{
+flex-direction:column;
+}
+
+#search{
+width:80%;
+}
+
+}

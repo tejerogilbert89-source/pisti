@@ -1,0 +1,178 @@
+/* =========================
+   RESET & VARIABLES
+========================= */
+:root {
+    --primary: #1b8f5a;
+    --primary-dark: #157047;
+    --glass: rgba(255, 255, 255, 0.14);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --text-light: #f5f7f6;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter','Segoe UI',sans-serif;
+}
+
+/* =========================
+   BODY
+========================= */
+body{
+    height:100vh;
+    overflow:hidden; /* removes scroll */
+    padding-top:80px;
+    background:
+        linear-gradient(135deg, rgba(0,40,25,0.9), rgba(0,120,80,0.9)),
+        url("huray.png.jpg") center / cover no-repeat fixed;
+    color:var(--text-light);
+}
+
+/* =========================
+   SIDEBAR TOP NAV
+========================= */
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:70px;
+    background:linear-gradient(90deg,var(--primary-dark),var(--primary));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    z-index:1000;
+}
+
+.sidebar h2{
+    color:#fff;
+    font-weight:700;
+}
+
+.sidebar ul{
+    display:flex;
+    gap:12px;
+    list-style:none;
+}
+
+.sidebar a{
+    color:#fff;
+    text-decoration:none;
+    padding:8px 20px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.15);
+    font-size:13px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,0.35);
+}
+
+/* =========================
+   MAIN
+========================= */
+.main{
+    height:calc(100vh - 80px);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+/* =========================
+   TITLE
+========================= */
+h1{
+    font-size:2rem;
+    margin-bottom:20px;
+}
+
+/* =========================
+   FORM
+========================= */
+form {
+    width: 100%;
+    max-width: 750px;
+
+    padding: 25px 35px;
+
+    background: var(--glass);
+    border-radius: 24px;
+
+    border: 1px solid var(--glass-border);
+
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+}
+
+
+/* full width elements */
+form button,
+form a{
+    grid-column:span 2;
+}
+
+/* =========================
+   FORM FIELDS
+========================= */
+label{
+    font-size:12px;
+    font-weight:600;
+}
+
+input,select{
+    width:100%;
+    padding:10px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.35);
+    background:rgba(255,255,255,0.2);
+    color:#fff;
+    font-size:13px;
+}
+
+input:focus,select:focus{
+    outline:none;
+    background:rgba(255,255,255,0.3);
+}
+
+/* =========================
+   INFO TEXT
+========================= */
+form p{
+    font-size:13px;
+    grid-column:span 2;
+}
+
+/* =========================
+   BUTTON
+========================= */
+button{
+    margin-top:10px;
+    padding:12px;
+    border-radius:999px;
+    border:none;
+    background:linear-gradient(135deg,var(--primary),#2ecc71);
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+form a{
+    text-align:center;
+    margin-top:5px;
+    color:#c0ffd8;
+    text-decoration:none;
+}
+
+form a:hover{
+    text-decoration:underline;
+}

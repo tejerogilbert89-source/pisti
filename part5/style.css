@@ -1,0 +1,306 @@
+/* ===========================
+   RESET
+=========================== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+/* ===========================
+   BODY
+=========================== */
+body{
+    min-height:100vh;
+    color:#1f2937;
+    background:
+    linear-gradient(rgba(4,43,28,.88),rgba(1,75,46,.88)),
+    url("huray.png.jpg") center/cover no-repeat fixed;
+}
+
+/* ===========================
+   TOP NAVBAR
+=========================== */
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:70px;
+    background:linear-gradient(180deg,#0b7a4f,#065f3b);
+    display:flex;
+    align-items:center;
+    padding:0 40px;
+    z-index:1000;
+    box-shadow:0 6px 20px rgba(0,0,0,.25);
+}
+
+.sidebar h2{
+    color:#fff;
+    font-size:1.5rem;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.sidebar ul{
+    list-style:none;
+    display:flex;
+    gap:12px;
+    margin-left:auto;
+}
+
+.sidebar ul li a{
+    text-decoration:none;
+    color:#ecfdf5;
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    background:rgba(255,255,255,.15);
+    transition:all .25s ease;
+}
+
+.sidebar ul li a:hover{
+    background:#ffffff;
+    color:#065f3b;
+    transform:translateY(-2px);
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+.main{
+    padding:120px 30px 40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.main h1{
+    font-size:2.2rem;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:25px;
+}
+
+/* ===========================
+   FILTER BUTTONS
+=========================== */
+.main div button{
+    padding:10px 22px;
+    border:none;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    margin:0 6px;
+    background:#10b981;
+    color:#fff;
+    transition:.25s;
+}
+
+.main div button:hover{
+    background:#047857;
+    transform:scale(1.05);
+}
+
+/* ===========================
+   SEARCH BAR
+=========================== */
+#searchInput{
+    width:100%;
+    max-width:500px;
+    margin:20px auto 30px;
+    padding:14px 18px;
+    border-radius:999px;
+    border:1px solid #d1d5db;
+    font-size:14px;
+    outline:none;
+    transition:.25s;
+}
+
+#searchInput:focus{
+    border-color:#0b7a4f;
+    box-shadow:0 0 0 3px rgba(11,122,79,.25);
+}
+
+/* ===========================
+   TABLE
+=========================== */
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+    font-size:13px;
+}
+
+/* HEADER */
+table th{
+    background:#0b7a4f;
+    color:#fff;
+    padding:14px;
+    font-weight:700;
+    text-align:left;
+}
+
+/* CELLS */
+table td{
+    padding:14px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+/* STRIPES */
+table tr:nth-child(even){
+    background:#f8fafc;
+}
+
+/* HOVER */
+table tr:hover{
+    background:#ecfdf5;
+}
+
+/* ===========================
+   OVERDUE ROW
+=========================== */
+.overdue-row{
+    background:#ffe4e6 !important;
+}
+
+/* ===========================
+   STATUS COLORS
+=========================== */
+td span{
+    font-weight:600;
+}
+
+/* ===========================
+   ACTION BUTTONS
+=========================== */
+td button{
+    border:none;
+    border-radius:999px;
+    padding:6px 14px;
+    font-size:12px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+td button[name="return"]{
+    background:#16a34a;
+    color:#fff;
+}
+
+td button[name="delete"]{
+    background:#dc2626;
+    color:#fff;
+}
+
+/* ===========================
+   FORM STYLING
+=========================== */
+form{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+form input,
+form select{
+    width:100%;
+    padding:13px 14px;
+    border-radius:10px;
+    border:1px solid #d1d5db;
+}
+
+form input:focus,
+form select:focus{
+    outline:none;
+    border-color:#0b7a4f;
+    box-shadow:0 0 0 3px rgba(11,122,79,.2);
+}
+
+form button{
+    align-self:center;
+    padding:13px 40px;
+    border:none;
+    border-radius:999px;
+    background:#0b7a4f;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+}
+
+form button:hover{
+    background:#065f3b;
+}
+
+/* ===========================
+   FLEX INPUT GROUPS
+=========================== */
+#nameFields,
+#courseYear{
+    display:flex;
+    gap:10px;
+}
+
+#nameFields input,
+#courseYear input,
+#courseYear select{
+    flex:1;
+}
+
+/* ===========================
+   MESSAGE ALERTS
+=========================== */
+.main p{
+    padding:12px 16px;
+    border-radius:10px;
+    margin-bottom:15px;
+    font-size:14px;
+}
+
+.main p[style*="green"]{
+    background:#dcfce7;
+    color:#065f46;
+}
+
+.main p[style*="red"]{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media(max-width:900px){
+
+    table{
+        font-size:12px;
+    }
+
+    .sidebar{
+        flex-wrap:wrap;
+        height:auto;
+        padding:15px;
+    }
+
+    .sidebar ul{
+        width:100%;
+        justify-content:center;
+        margin-top:10px;
+    }
+
+    .main{
+        padding:150px 15px 40px;
+    }
+
+    #nameFields,
+    #courseYear{
+        flex-direction:column;
+    }
+}

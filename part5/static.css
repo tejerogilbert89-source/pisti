@@ -1,0 +1,246 @@
+/* ===========================
+   RESET & BASE
+=========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    color: #1f3723;
+
+    /* Background */
+    background:
+        linear-gradient(rgba(4, 43, 28, 0.88), rgba(1, 75, 46, 0.88)),
+        url("huray.png.jpg") center / cover no-repeat fixed;
+
+    /* GAP for fixed top admin bar */
+    padding-top: 90px;
+}
+
+/* ===========================
+   FIXED TOP ADMIN BAR
+=========================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(180deg, #0b7a4f, #096b45);
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    z-index: 1000;
+    box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+.sidebar h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.sidebar ul {
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    margin-left: auto;
+}
+
+.sidebar ul li a {
+    padding: 9px 20px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    background: rgba(255,255,255,.18);
+    text-decoration: none;
+    transition: .25s;
+}
+
+.sidebar ul li a:hover {
+    background: rgba(255,255,255,.32);
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+.main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* STAT BOX */
+.stat-box {
+    background: rgba(11, 122, 79, 0.18);
+    border-radius: 16px;
+    padding: 14px 20px;
+    font-weight: 700;
+    color: #e6f4ea;
+    margin-bottom: 20px;
+}
+
+/* ===========================
+   FILTER FORM
+=========================== */
+form[method="GET"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+form[method="GET"] select {
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: none;
+    font-size: 14px;
+}
+
+form[method="GET"] button,
+form[method="GET"] a {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+form[method="GET"] button {
+    background: #0b7a4f;
+    color: #fff;
+    border: none;
+}
+
+form[method="GET"] button:hover {
+    background: #075f3c;
+}
+
+form[method="GET"] a {
+    background: #ccc;
+    color: #000;
+}
+
+form[method="GET"] a:hover {
+    background: #999;
+}
+
+/* ===========================
+   PRINT BUTTON
+=========================== */
+#printBtn {
+    display: block;
+    margin: 10px auto 30px;
+    padding: 10px 28px;
+    border-radius: 999px;
+    border: none;
+    background: #0b7a4f;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#printBtn:hover {
+    background: #075f3c;
+}
+
+/* ===========================
+   TABLE STYLING
+=========================== */
+.table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 40px;
+}
+
+table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+table th {
+    background: #0b7a4f;
+    color: #fff;
+    padding: 14px;
+    font-weight: 800;
+    text-align: left;
+}
+
+table td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+table tr:hover {
+    background: #eaf6f0;
+}
+
+/* ACTION BUTTONS INSIDE TABLE */
+button[name="return"] {
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    background: #0b7a4f;
+    color: #fff;
+    font-size: 13px;
+}
+
+button[name="return"]:hover {
+    background: #075f3c;
+}
+
+/* ===========================
+   MESSAGES
+=========================== */
+p {
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 900px) {
+    form[method="GET"] {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    table {
+        min-width: 400px;
+    }
+
+    .sidebar {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .main {
+        padding: 10px;
+    }
+
+    form[method="GET"] select,
+    form[method="GET"] button,
+    form[method="GET"] a {
+        width: 100%;
+    }
+}

@@ -1,0 +1,440 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* =========================
+   BODY BACKGROUND
+========================= */
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0, 50, 25, 0.85), rgba(0, 100, 50, 0.85)),
+        url("huray.png.jpg") center/cover no-repeat fixed;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================
+   PAGE CONTAINER
+========================= */
+.container{
+    padding-top:90px;
+    padding-left:40px;
+    padding-right:40px;
+}
+
+/* =========================
+   TOP NAVBAR
+========================= */
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:70px;
+
+    background:#0b7a4f;
+
+    display:flex;
+    align-items:center;
+
+    z-index:1000;
+
+    box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+.sidebar nav{
+    width:100%;
+    display:flex;
+    align-items:center;
+    padding:0 40px;
+}
+
+.sidebar h2{
+    font-size:1.6rem;
+    font-weight:900;
+    letter-spacing:2px;
+    margin-right:auto;
+}
+
+/* NAV MENU */
+.sidebar ul{
+    list-style:none;
+    display:flex;
+    gap:12px;
+}
+
+.sidebar a{
+    text-decoration:none;
+    color:#fff;
+    font-size:13px;
+    font-weight:bold;
+
+    padding:8px 18px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,0.15);
+
+    transition:0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+    background:rgba(255,255,255,0.35);
+    transform:translateY(-2px);
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+.main{
+    max-width:1800px;
+    margin:auto;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+h2{
+    margin:40px 0 20px;
+    font-size:1.8rem;
+    font-weight:700;
+}
+
+/* =========================
+   ADD BOOK FORM
+========================= */
+.book-form{
+
+    display:grid;
+    grid-template-columns:repeat(9,1fr);
+
+    gap:16px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,0.10);
+
+    backdrop-filter: blur(8px);
+
+    box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+
+/* INPUTS */
+.book-form input,
+.book-form select{
+
+    width:100%;
+
+    padding:14px 18px;
+
+    border-radius:999px;
+
+    border:none;
+
+    outline:none;
+
+    font-size:13px;
+
+    color:#000;
+}
+
+.book-form input::placeholder{
+    color:#777;
+}
+
+/* =========================
+   ADD BOOK BUTTON
+========================= */
+.add-book-btn{
+
+    grid-column:1/-1;
+
+    justify-self:center;
+
+    width:280px;
+
+    padding:16px 24px;
+
+    border:none;
+
+    border-radius:40px;
+
+    background:linear-gradient(90deg,#0b7a4f,#0da15d);
+
+    color:#fff;
+
+    font-weight:700;
+
+    font-size:15px;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    box-shadow:0 6px 14px rgba(0,0,0,0.3);
+}
+
+.add-book-btn:hover{
+
+    background:linear-gradient(90deg,#0da15d,#0b7a4f);
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.35);
+}
+
+/* =========================
+   SEARCH BAR
+========================= */
+#search{
+
+    width:100%;
+
+    max-width:900px;
+
+    margin:25px auto;
+
+    display:block;
+
+    padding:15px 25px;
+
+    border-radius:40px;
+
+    border:none;
+
+    outline:none;
+
+    font-size:14px;
+
+    color:#000;
+}
+
+#search:focus{
+    box-shadow:0 0 0 4px rgba(11,122,79,0.35);
+}
+
+/* =========================
+   SHELF FILTER 
+========================= */
+.shelf-filter{
+   text-align:center;
+
+margin-bottom:25px;
+}
+
+.shelf-filter button{
+
+ padding:7px 16px;
+
+border:none;
+
+border-radius:20px;
+
+margin:4px;
+
+font-size:13px;
+
+font-weight:600;
+
+cursor:pointer;
+
+background:#fff;
+
+color:#0b7a4f;
+
+transition:0.25s;
+}
+
+.shelf-filter button:hover{
+background:#0b7a4f;
+
+color:#fff;
+
+transform:translateY(-2px);
+}
+
+/* =========================
+   TABLE
+========================= */
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:#fff;
+
+    color:#000;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    margin-bottom:60px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,0.25);
+}
+
+/* HEADER */
+th{
+
+    background:#0b7a4f;
+
+    color:#fff;
+
+    padding:14px;
+
+    text-align:left;
+
+    font-size:13px;
+
+    letter-spacing:0.5px;
+}
+
+/* CELLS */
+td{
+
+    padding:12px;
+
+    border-bottom:1px solid #e2e2e2;
+
+    font-size:13px;
+}
+
+tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+tr:hover{
+    background:#e9f6f0;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+td form{
+    display:inline;
+    background:none;
+}
+
+td button{
+
+    padding:6px 10px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    background:#0b7a4f;
+
+    color:#fff;
+
+    margin:2px;
+
+    transition:0.25s;
+}
+
+td button:hover{
+    background:#0da15d;
+}
+
+/* DELETE BUTTON */
+td button[style*="background:red"]{
+    background:#c0392b !important;
+}
+
+td button[style*="background:red"]:hover{
+    background:#e74c3c !important;
+}
+
+/* LINKS */
+td a{
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    color:#0b7a4f;
+
+    margin:0 4px;
+}
+
+td a:hover{
+    text-decoration:underline;
+}
+
+/* BORROWER DROPDOWN */
+td select{
+
+    padding:6px 10px;
+
+    border-radius:10px;
+
+    border:1px solid #ccc;
+}
+
+/* =========================
+   STATUS COLORS
+========================= */
+td:nth-child(11){
+    font-weight:bold;
+}
+
+td:nth-child(11):contains("Available"){
+    color:#27ae60;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+
+.book-form{
+    grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.container{
+    padding:100px 20px 40px;
+}
+
+.sidebar ul{
+    flex-direction:column;
+}
+
+.book-form{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.add-book-btn{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+}
+
+}
